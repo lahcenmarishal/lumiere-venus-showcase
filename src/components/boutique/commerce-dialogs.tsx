@@ -63,9 +63,17 @@ export function CartDialog({ open, onClose, items, setItems, products }: { open:
   </DialogContent></Dialog>;
 }
 
-export function openWhatsApp(product?: Product) {
+function sendWhatsApp(message: string) {
   if (!boutique.whatsapp) return false;
-  const message = product ? `Bonjour, je suis intéressée par ${product.name}. Je voudrais connaître les dimensions et matières disponibles et passer commande.` : 'Bonjour JAMILA JEWELRY, je souhaite découvrir votre collection de bijoux et passer commande.';
   window.open(`https://wa.me/${boutique.whatsapp}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   return true;
+}
+
+export function openWhatsApp(product?: Product) {
+  const message = product ? `Bonjour, je suis intéressée par ${product.name}. Je voudrais connaître les dimensions et matières disponibles et passer commande.` : 'Bonjour JAMILA JEWELRY, je souhaite découvrir votre collection de bijoux et passer commande.';
+  return sendWhatsApp(message);
+}
+
+export function openWhatsAppPiece(name: string) {
+  return sendWhatsApp(`Bonjour, je suis intéressée par ${name}. Je voudrais connaître les dimensions, les matières et les modalités de commande.`);
 }
