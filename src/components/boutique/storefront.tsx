@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/compone
 import { CartDialog, InfoDialog, ProductDialog, WhatsAppIcon, openWhatsApp, type InfoKind } from '@/components/boutique/commerce-dialogs';
 import { money, unitPrice, type Product, type Size, type CartItem } from '@/data/catalog';
 import hero from '@/assets/jamila-editorial.jpg';
+import heroMobile from '@/assets/jamila-hero-mobile.jpg';
 import { JewelryInspirations } from '@/components/boutique/jewelry-inspirations';
 import { reviewExamples } from '@/data/trust-examples';
 import logo from '@/assets/jamila-logo.png.asset.json';
