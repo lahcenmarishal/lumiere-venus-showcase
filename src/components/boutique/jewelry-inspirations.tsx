@@ -22,7 +22,7 @@ export function JewelryInspirations({ filter, onContact }: { filter: string; onC
   const visible = inspirations.filter(piece => filter === 'Tous les bijoux' || piece.category === filter);
   return <>
     <div className="product-grid inspiration-grid">{visible.map(piece => <article key={piece.name}>
-      <div className="product-photo"><img src={piece.image} alt={`${piece.name} — inspiration de bijou générée`} loading="lazy" width={1024} height={1280}/><span className="product-tag">{piece.category}</span></div>
+      <div className="product-photo"><Button variant="tool" className="photo-trigger" aria-label={`Voir ${piece.name}`} onClick={() => setOpenName(piece.name)}><img src={piece.image} alt={`${piece.name} — inspiration de bijou générée`} loading="lazy" width={1024} height={1280}/></Button><span className="product-tag">{piece.category}</span></div>
       <div className="product-caption"><h3>{piece.name}</h3></div><p className="product-desc">{piece.description}</p>
       <div className="product-actions"><Button variant="coutureOutline" onClick={() => setOpenName(piece.name)}>VOIR LES DÉTAILS <ArrowUpRight size={12}/></Button><Button variant="couture" onClick={() => ask(piece)}>COMMANDER</Button></div>
     </article>)}</div>
