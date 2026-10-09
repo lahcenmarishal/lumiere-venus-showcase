@@ -2,14 +2,14 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, type FormEvent } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-const logo = { url: '/images/lumiere-logo-transparent.webp' };
+import logo from '@/assets/jamila-logo.png.asset.json';
 
 export const Route = createFileRoute('/auth')({
   head: () => ({ meta: [
-    { title: 'Connexion administrateur — LUMIERE VENUS' },
-    { name: 'description', content: 'Accès réservé à l’équipe LUMIERE VENUS pour gérer la sélection et les commandes.' },
-    { property: 'og:title', content: 'Connexion administrateur — LUMIERE VENUS' },
-    { property: 'og:description', content: 'Espace réservé à l’équipe LUMIERE VENUS.' },
+    { title: 'Connexion administrateur — JAMILA JEWELRY' },
+    { name: 'description', content: 'Accès réservé à l’équipe JAMILA JEWELRY pour gérer la sélection et les commandes.' },
+    { property: 'og:title', content: 'Connexion administrateur — JAMILA JEWELRY' },
+    { property: 'og:description', content: 'Espace réservé à l’équipe JAMILA JEWELRY.' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary' },
     { name: 'robots', content: 'noindex' },
@@ -36,7 +36,7 @@ function AuthPage() {
     setPending(false);
   }
   return <main className="admin-auth"><form className="admin-card admin-auth-card" onSubmit={submit}>
-    <img src={logo.url} alt="LUMIERE VENUS" width={150} height={72} />
+    <img src={logo.url} alt="JAMILA JEWELRY" width={150} height={72} />
     <h1>{mode === 'in' ? 'Espace administrateur' : 'Créer un compte'}</h1>
     <label>Email<input name="email" type="email" required autoComplete="email" /></label>
     <label>Mot de passe<input name="password" type="password" required minLength={8} autoComplete={mode === 'in' ? 'current-password' : 'new-password'} /></label>

@@ -11,8 +11,8 @@ export const Route = createFileRoute('/produit/$id')({
   },
   head: ({ loaderData }) => {
     const p = loaderData?.product;
-    const title = p ? `${p.name} — LUMIERE VENUS` : 'Pièce — LUMIERE VENUS';
-    const desc = p ? `${p.name} : ${p.description}. Sélection exclusive LUMIERE VENUS, packaging premium, livraison au Maroc.` : 'Une pièce de la sélection LUMIERE VENUS.';
+    const title = p ? `${p.name} — JAMILA JEWELRY` : 'Pièce — JAMILA JEWELRY';
+    const desc = p ? `${p.name} : ${p.description}. Collection de bijoux JAMILA JEWELRY, livraison au Maroc.` : 'Un bijou de la collection JAMILA JEWELRY.';
     return { meta: [
       { title }, { name: 'description', content: desc },
       { property: 'og:title', content: title }, { property: 'og:description', content: desc },
