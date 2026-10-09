@@ -194,3 +194,11 @@ button { cursor:pointer; } a:focus-visible { outline:2px solid var(--gold); outl
 .cart-delivery { display:flex; justify-content:space-between; align-items:center; font-size:12px; margin:15px 0; }
 .cart-delivery strong { color:var(--primary); font-weight:600; }
 @media(max-width:760px) { .trust-grid { grid-template-columns:1fr; gap:28px; } .trust-item + .trust-item { padding-top:26px; border-top:1px solid var(--border); } .trust-band { padding:38px 0; } .trust-band > .site-width > h2 { font-size:34px; } .reassurance { gap:14px 20px; } }
+
+/* Jewelry identity: retain the existing couture layout. */
+.brand img { width:180px; height:80px; }
+.footer-logo { width:270px; height:135px; }
+.inspiration-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.inspiration-grid .product-photo { aspect-ratio:4/5; }
+@media(max-width:1050px) { .brand img { width:155px; height:74px; } .filter-tabs { gap:16px; flex-wrap:wrap; } .section-top { gap:24px; } }
+@media(max-width:760px) { .brand img { width:145px; height:70px; } .hero-image-mobile { object-position:65% center; } .hero-title { font-size:50px; } .hero::after { background:var(--editorial-shade); } .inspiration-grid { grid-template-columns:minmax(0,1fr); } .filter-tabs { gap:12px 20px; } .footer-logo { width:240px; height:120px; } }

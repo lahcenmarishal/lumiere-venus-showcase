@@ -78,9 +78,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "LUMIERE VENUS — Robes & élégance" },
-      { name: "description", content: "LUMIERE VENUS, une sélection de robes élégantes et de dentelle au Maroc." },
-      { property: "og:title", content: "LUMIERE VENUS — Robes & élégance" },
+      { title: "JAMILA JEWELRY — Bijoux & élégance" },
+      { name: "description", content: "JAMILA JEWELRY, un univers de bijoux de luxe et d’élégance au Maroc." },
+      { property: "og:title", content: "JAMILA JEWELRY — Bijoux & élégance" },
       { property: "og:description", content: "Des pièces choisies pour vos plus beaux moments, au Maroc." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

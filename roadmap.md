@@ -1,4 +1,7 @@
-# Lumiere Venus
+# JAMILA JEWELRY
+- [x] Rebrand the storefront, dialogs and page titles for luxury jewelry while preserving the design.
+- [x] Replace fashion imagery with premium jewelry imagery and place the uploaded logo and favicon.
+- [x] Verify branding, imagery and navigation on the updated storefront.
 - [x] Create the French luxury storefront with uploaded logo and four products.
 - [x] Add product details, size selection, cart and order form.
 - [x] Connect order storage if Cloud is available.

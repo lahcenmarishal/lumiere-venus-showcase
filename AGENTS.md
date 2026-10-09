@@ -15,3 +15,4 @@
 
 - Trust information must reflect actual payment methods and supplied customer feedback; this prevents misleading commerce claims.
 - Keep illustrative reviews and proposed return terms in a separate demonstration dataset with explicit visible disclaimers; this prevents seed content from being mistaken for verified commercial claims.
+- Keep generated jewelry inspirations in a separate non-orderable presentation component when the product catalog is empty; this previews the brand without inventing saleable stock or prices.

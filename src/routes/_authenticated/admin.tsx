@@ -13,10 +13,10 @@ const tokens = ['turquoise', 'rouge', 'magenta', 'noire'];
 
 export const Route = createFileRoute('/_authenticated/admin')({
   head: () => ({ meta: [
-    { title: 'Tableau de bord — LUMIERE VENUS' },
-    { name: 'description', content: 'Gestion des produits, des commandes et des ventes LUMIERE VENUS.' },
-    { property: 'og:title', content: 'Tableau de bord — LUMIERE VENUS' },
-    { property: 'og:description', content: 'Espace administrateur LUMIERE VENUS.' },
+    { title: 'Tableau de bord — JAMILA JEWELRY' },
+    { name: 'description', content: 'Gestion des produits, des commandes et des ventes JAMILA JEWELRY.' },
+    { property: 'og:title', content: 'Tableau de bord — JAMILA JEWELRY' },
+    { property: 'og:description', content: 'Espace administrateur JAMILA JEWELRY.' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary' },
     { name: 'robots', content: 'noindex' },
@@ -48,7 +48,7 @@ function AdminPage() {
   if (!isAdmin) return <main className="admin-auth"><div className="admin-card admin-auth-card"><h1>Accès réservé</h1><p>Ce compte n’a pas encore le rôle administrateur. Ajoutez-le dans la base de données (table « user_roles », rôle « admin ») avec cet identifiant :</p><code className="admin-code">{user.id}</code><Button variant="coutureOutline" onClick={signOut}>SE DÉCONNECTER</Button></div></main>;
 
   return <main className="admin">
-    <header className="admin-header"><div><span className="eyebrow">LUMIERE VENUS</span><h1>Tableau de bord</h1></div>
+    <header className="admin-header"><div><span className="eyebrow">JAMILA JEWELRY</span><h1>Tableau de bord</h1></div>
       <div className="admin-header-tools"><a href="/" className="couture-tool">Voir le site</a><Button variant="coutureOutline" onClick={signOut}>DÉCONNEXION</Button></div></header>
     <nav className="admin-tabs">{([['stats', 'Statistiques'], ['orders', `Commandes (${orders.length})`], ['products', `Produits (${products.length})`]] as const).map(([k, l]) => <Button key={k} variant="tool" className={tab === k ? 'active' : ''} onClick={() => setTab(k)}>{l}</Button>)}</nav>
     {tab === 'stats' && <Stats orders={orders} />}
@@ -101,7 +101,7 @@ function Orders({ orders, reload }: { orders: OrderRow[]; reload: () => void }) 
   </section>;
 }
 
-const empty = { id: '', sku: '', name: '', category: 'Robes', price: 0, sale_price: null as number | null, description: '', detail: '', material: '', cut: '', images: [] as string[], color: '', color_token: 'noire', sizes: [...allSizes] as string[], available: true, active: true, label: '', sort_order: 0 };
+const empty = { id: '', sku: '', name: '', category: 'Bagues', price: 0, sale_price: null as number | null, description: '', detail: '', material: '', cut: '', images: [] as string[], color: '', color_token: 'noire', sizes: [...allSizes] as string[], available: true, active: true, label: '', sort_order: 0 };
 const slug = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 function Products({ products, reload }: { products: ProductRow[]; reload: () => void }) {
@@ -137,15 +137,15 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
     <h2>{isNew ? 'Nouveau produit' : `Modifier ${edit.name}`}</h2>
     <div className="admin-grid">
       <label>Nom<input required value={edit.name} onChange={e => set('name', e.target.value)} /></label>
-      <label>SKU<input required value={edit.sku} onChange={e => set('sku', e.target.value)} placeholder="LV-005" /></label>
-      <label>Catégorie<select value={edit.category} onChange={e => set('category', e.target.value)}><option>Robes</option><option>Dentelle</option></select></label>
+      <label>SKU<input required value={edit.sku} onChange={e => set('sku', e.target.value)} placeholder="JJ-005" /></label>
+      <label>Catégorie<select value={edit.category} onChange={e => set('category', e.target.value)}><option>Bagues</option><option>Colliers</option><option>Bracelets</option><option>Boucles d’oreilles</option></select></label>
       <label>Étiquette<input value={edit.label} onChange={e => set('label', e.target.value)} placeholder="Pièce signature" /></label>
       <label>Prix (DH)<input required type="number" min={0} value={edit.price} onChange={e => set('price', Number(e.target.value))} /></label>
       <label>Prix promo (DH)<input type="number" min={0} value={edit.sale_price ?? ''} onChange={e => set('sale_price', e.target.value ? Number(e.target.value) : null)} /></label>
       <label>Couleur<input value={edit.color} onChange={e => set('color', e.target.value)} /></label>
       <label>Pastille couleur<select value={edit.color_token} onChange={e => set('color_token', e.target.value)}>{tokens.map(t => <option key={t}>{t}</option>)}</select></label>
       <label>Matière<input value={edit.material} onChange={e => set('material', e.target.value)} /></label>
-      <label>Coupe<input value={edit.cut} onChange={e => set('cut', e.target.value)} /></label>
+      <label>Design<input value={edit.cut} onChange={e => set('cut', e.target.value)} /></label>
       <label>Ordre d’affichage<input type="number" value={edit.sort_order} onChange={e => set('sort_order', Number(e.target.value))} /></label>
       <fieldset><legend>Tailles</legend>{allSizes.map(s => <label key={s} className="admin-check"><input type="checkbox" checked={edit.sizes.includes(s)} onChange={e => set('sizes', e.target.checked ? [...edit.sizes, s] : edit.sizes.filter(x => x !== s))} />{s}</label>)}</fieldset>
     </div>
