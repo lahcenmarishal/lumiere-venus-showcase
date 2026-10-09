@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, type FormEvent } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import logo from '@/assets/jamila-logo.png.asset.json';
+import { BrandMark } from '@/components/boutique/brand-mark';
 
 export const Route = createFileRoute('/auth')({
   head: () => ({ meta: [
@@ -36,7 +36,7 @@ function AuthPage() {
     setPending(false);
   }
   return <main className="admin-auth"><form className="admin-card admin-auth-card" onSubmit={submit}>
-    <img src={logo.url} alt="JAMILA JEWELRY" width={150} height={72} />
+    <BrandMark className="admin-logo" label="JAMILA JEWELRY" />
     <h1>{mode === 'in' ? 'Espace administrateur' : 'Créer un compte'}</h1>
     <label>Email<input name="email" type="email" required autoComplete="email" /></label>
     <label>Mot de passe<input name="password" type="password" required minLength={8} autoComplete={mode === 'in' ? 'current-password' : 'new-password'} /></label>
