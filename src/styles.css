@@ -212,3 +212,13 @@ button { cursor:pointer; } a:focus-visible { outline:2px solid var(--gold); outl
 .admin-auth-card .brand-mark { width:132px; height:64px; margin:0 auto;
  background-image:linear-gradient(150deg,#e6c273 0%,#c99a3d 28%,#8f6a1e 54%,#d8ae52 74%,#6f4d12 100%);
  filter:none; }
+
+/* Inspiration detail sheet: photo, note and the two couture actions. */
+.inspiration-dialog { padding:0; }
+.inspiration-detail { display:flex; flex-direction:column; gap:14px; padding:0 0 30px; }
+.inspiration-detail img { width:100%; height:420px; object-fit:contain; background:var(--secondary); }
+.inspiration-detail > .eyebrow { padding:0 30px; }
+.inspiration-detail .detail-description { padding:0 30px; color:var(--muted-foreground); font-size:12px; line-height:1.9; }
+.inspiration-detail .detail-note { padding:0 30px; color:var(--muted-foreground); font-size:10px; line-height:1.8; letter-spacing:.3px; }
+.inspiration-detail .detail-cta { display:flex; flex-direction:row; gap:7px; padding:6px 30px 0; }
+.inspiration-detail .detail-cta .couture-button { flex:1; min-width:0; padding:0 10px; font-size:10px; height:40px; letter-spacing:.7px; }
