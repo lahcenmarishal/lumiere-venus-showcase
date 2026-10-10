@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
-import { unitPrice } from '@/data/catalog';
+import { unitPrice, sizes } from '@/data/catalog';
 import { publicClient } from './public-client.server';
 import { rowToProduct } from './products';
 
@@ -9,7 +9,7 @@ const orderSchema = z.object({
   phone: z.string().trim().regex(/^(?:\+212|0)[5-7][0-9]{8}$/),
   city: z.string().trim().min(2).max(80),
   address: z.string().trim().min(5).max(400),
-  items: z.array(z.object({ productId: z.string().max(100), size: z.enum(['S', 'M', 'L', 'XL']), quantity: z.number().int().min(1).max(10) })).min(1).max(20),
+  items: z.array(z.object({ productId: z.string().max(100), size: z.enum(sizes), quantity: z.number().int().min(1).max(10) })).min(1).max(20),
 });
 
 export const submitOrder = createServerFn({ method: 'POST' })
