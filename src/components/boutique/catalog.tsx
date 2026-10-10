@@ -6,7 +6,7 @@ import { money, unitPrice, type Product } from '@/data/catalog';
 
 export function ProductCard({ product }: { product: Product }) {
   return <article>
-    <div className="product-photo"><Link to="/produit/$id" params={{ id: product.id }} className="photo-trigger" aria-label={`Voir ${product.name}`}><img src={product.images[0]} alt={product.name} loading="lazy" width={600} height={600}/></Link>{product.label && <span className="product-tag">{product.label}</span>}</div>
+    <div className={`product-photo ${product.images[1] ? 'has-hover' : ''}`}><Link to="/produit/$id" params={{ id: product.id }} className="photo-trigger" aria-label={`Voir ${product.name}`}><img className="product-primary-image" src={product.images[0]} alt={product.name} loading="lazy" width={600} height={600}/>{product.images[1] && <img className="product-hover-image" src={product.images[1]} alt="" aria-hidden="true" loading="lazy" width={600} height={600}/>}</Link>{product.label && <span className="product-tag">{product.label}</span>}</div>
     <div className="product-caption"><h3>{product.name}</h3><span className="product-price">{money(unitPrice(product))}</span></div>
     <p className="product-desc">{product.description}</p>
     <div className="product-actions">
@@ -32,9 +32,9 @@ export function ProductCatalog({ products, categories }: { products: Product[]; 
   const [sort, setSort] = useState('new');
   const [shown, setShown] = useState(PAGE);
   const list = useMemo(() => {
-    const range = priceRanges.find(r => r.key === price)!;
+    const range = priceRanges.find(r => r.key === price) ?? priceRanges[0];
     const kw = stone === 'perle' ? /perl|nacr/i : stone === 'strass' ? /strass|zircon|serti|cristal|pav/i : stone === 'couleur' ? /vert|émeraude|noir|onyx|émail/i : null;
-    const out = products.filter(p => (cat === 'all' || p.category === cat) && range.test(unitPrice(p)) && (!kw || kw.test(`${p.name} ${p.description}`)));
+    const out = products.filter(p => (cat === 'all' || p.category === cat) && (!range || range.test(unitPrice(p))) && (!kw || kw.test(`${p.name} ${p.description}`)));
     return [...out].sort((a, b) => sort === 'asc' ? unitPrice(a) - unitPrice(b) : sort === 'desc' ? unitPrice(b) - unitPrice(a) : sort === 'popular' ? Number(b.featured) - Number(a.featured) || a.sortOrder - b.sortOrder : b.sortOrder - a.sortOrder);
   }, [products, cat, price, stone, sort]);
   const reset = (f: () => void) => { f(); setShown(PAGE); };

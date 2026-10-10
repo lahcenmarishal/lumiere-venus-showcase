@@ -46,7 +46,7 @@ function ProductPage() {
       <nav className="breadcrumb" aria-label="Fil d’Ariane"><Link to="/">Accueil</Link> / <Link to="/boutique">Boutique</Link> / <Link to="/collections/$slug" params={{ slug: slugOf(product.category) }}>{product.category}</Link> / <span>{product.name}</span></nav>
       <div className="product-page-grid">
         <div className="gallery"><div className="gallery-main"><img src={product.images[img] ?? product.images[0]} alt={product.name}/></div>
-          {product.images.length > 1 && <div className="gallery-thumbs">{product.images.map((src, i) => <button type="button" key={src} className={i === img ? 'active' : ''} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}><img src={src} alt=""/></button>)}</div>}</div>
+          {product.images.length > 1 && <div className="gallery-thumbs">{product.images.map((src, i) => <Button variant="tool" type="button" key={`${src}-${i}`} className={i === img ? 'active' : ''} onClick={() => setImg(i)} aria-pressed={i === img} aria-label={`Photo ${i + 1}`}><img src={src} alt=""/></Button>)}</div>}</div>
         <div className="detail-info">
           {product.label && <span className="eyebrow text-primary">{product.label}</span>}
           <h1>{product.name}</h1>

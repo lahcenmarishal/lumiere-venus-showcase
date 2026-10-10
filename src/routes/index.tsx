@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { listProducts } from '@/lib/products.functions';
 import { getSiteData } from '@/lib/site.functions';
 import { SiteShell } from '@/components/boutique/site-shell';
-import { ProductCard } from '@/components/boutique/catalog';
+import { FeaturedCarousel } from '@/components/boutique/featured-carousel';
 import { TestimonialGallery } from '@/components/boutique/testimonials';
 import hero from '@/assets/jamila-editorial.jpg';
 import heroMobile from '@/assets/jamila-hero-mobile.jpg';
@@ -41,7 +41,7 @@ function Home() {
 
     {featured.length > 0 && <section className="collection site-width">
       <div className="section-top"><div><span className="eyebrow">NOTRE SÉLECTION</span><h2>Nos coups de cœur</h2><p>Une sélection de pièces choisies par la maison.</p></div><Button variant="coutureOutline" asChild><Link to="/boutique">VOIR TOUTE LA BOUTIQUE <ArrowUpRight size={12}/></Link></Button></div>
-      <div className="product-grid">{featured.map(p => <ProductCard key={p.id} product={p}/>)}</div>
+      <FeaturedCarousel products={featured}/>
     </section>}
 
     <section className="brand-band"><div className="site-width brand-band-inner">
