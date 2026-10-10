@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { money, sizes as allSizes } from '@/data/catalog';
 import type { ProductRow } from '@/lib/products';
 import type { Database } from '@/integrations/supabase/types';
+import { FeaturedAdmin, CategoriesAdmin, TestimonialsAdmin, ContentAdmin } from '@/components/admin/site-admin';
 
 type OrderRow = Database['public']['Tables']['orders']['Row'];
 type OrderItem = { productId: string; name: string; sku: string; size: string; quantity: number; price: number };
@@ -28,7 +29,7 @@ function AdminPage() {
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [tab, setTab] = useState<'stats' | 'orders' | 'products'>('stats');
+  const [tab, setTab] = useState<'stats' | 'orders' | 'products' | 'featured' | 'categories' | 'testimonials' | 'content'>('stats');
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [products, setProducts] = useState<ProductRow[]>([]);
 
@@ -50,10 +51,14 @@ function AdminPage() {
   return <main className="admin">
     <header className="admin-header"><div><span className="eyebrow">JAMILA JEWELRY</span><h1>Tableau de bord</h1></div>
       <div className="admin-header-tools"><a href="/" className="couture-tool">Voir le site</a><Button variant="coutureOutline" onClick={signOut}>DÉCONNEXION</Button></div></header>
-    <nav className="admin-tabs">{([['stats', 'Statistiques'], ['orders', `Commandes (${orders.length})`], ['products', `Produits (${products.length})`]] as const).map(([k, l]) => <Button key={k} variant="tool" className={tab === k ? 'active' : ''} onClick={() => setTab(k)}>{l}</Button>)}</nav>
+    <nav className="admin-tabs">{([['stats', 'Statistiques'], ['orders', `Commandes (${orders.length})`], ['products', `Produits (${products.length})`], ['featured', 'Sélection accueil'], ['categories', 'Collections'], ['testimonials', 'Avis clients'], ['content', 'Contenus']] as const).map(([k, l]) => <Button key={k} variant="tool" className={tab === k ? 'active' : ''} onClick={() => setTab(k)}>{l}</Button>)}</nav>
     {tab === 'stats' && <Stats orders={orders} />}
     {tab === 'orders' && <Orders orders={orders} reload={load} />}
     {tab === 'products' && <Products products={products} reload={load} />}
+    {tab === 'featured' && <FeaturedAdmin products={products} reload={load} />}
+    {tab === 'categories' && <CategoriesAdmin />}
+    {tab === 'testimonials' && <TestimonialsAdmin />}
+    {tab === 'content' && <ContentAdmin />}
   </main>;
 }
 
@@ -101,7 +106,7 @@ function Orders({ orders, reload }: { orders: OrderRow[]; reload: () => void }) 
   </section>;
 }
 
-const empty = { id: '', sku: '', name: '', category: 'Bagues', price: 0, sale_price: null as number | null, description: '', detail: '', material: '', cut: '', images: [] as string[], color: '', color_token: 'noire', sizes: [...allSizes] as string[], available: true, active: true, label: '', sort_order: 0 };
+const empty = { id: '', sku: '', name: '', category: 'Bagues', price: 0, sale_price: null as number | null, description: '', detail: '', material: '', cut: '', images: [] as string[], color: '', color_token: 'noire', sizes: [...allSizes] as string[], available: true, active: true, label: '', sort_order: 0, featured: false, featured_order: 0 };
 const slug = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 function Products({ products, reload }: { products: ProductRow[]; reload: () => void }) {
@@ -124,7 +129,8 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
   }
   async function save(ev: FormEvent) {
     ev.preventDefault(); if (!edit) return; setBusy(true); setMsg('');
-    const row = { ...edit, id: edit.id || slug(edit.name) || crypto.randomUUID(), price: Number(edit.price), sale_price: edit.sale_price ? Number(edit.sale_price) : null, sort_order: Number(edit.sort_order) };
+    const { created_at: _c, updated_at: _u, stock: _s, ...clean } = edit as typeof edit & { created_at?: string; updated_at?: string; stock?: number | null };
+    const row = { ...clean, id: edit.id || slug(edit.name) || crypto.randomUUID(), price: Number(edit.price), sale_price: edit.sale_price ? Number(edit.sale_price) : null, sort_order: Number(edit.sort_order) };
     const { error } = isNew ? await supabase.from('products').insert(row) : await supabase.from('products').update(row).eq('id', edit.id);
     setBusy(false);
     if (error) { setMsg(error.code === '23505' ? 'Ce SKU ou cet identifiant existe déjà.' : 'Enregistrement impossible.'); return; }
@@ -151,7 +157,7 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
     </div>
     <label>Description courte<input value={edit.description} onChange={e => set('description', e.target.value)} /></label>
     <label>Description détaillée<textarea rows={4} value={edit.detail} onChange={e => set('detail', e.target.value)} /></label>
-    <div className="admin-row"><label className="admin-check"><input type="checkbox" checked={edit.available} onChange={e => set('available', e.target.checked)} />Disponible</label><label className="admin-check"><input type="checkbox" checked={edit.active} onChange={e => set('active', e.target.checked)} />Visible sur le site</label></div>
+    <div className="admin-row"><label className="admin-check"><input type="checkbox" checked={edit.available} onChange={e => set('available', e.target.checked)} />Disponible</label><label className="admin-check"><input type="checkbox" checked={edit.active} onChange={e => set('active', e.target.checked)} />Visible sur le site</label><label className="admin-check"><input type="checkbox" checked={edit.featured} onChange={e => set('featured', e.target.checked)} />Afficher sur la page d’accueil</label><label>Ordre accueil<input type="number" value={edit.featured_order} onChange={e => set('featured_order', Number(e.target.value))} style={{ width: 70 }} /></label></div>
     <div><span className="eyebrow">Images</span><div className="admin-images">{edit.images.map((src, i) => <div key={src} className="admin-thumb"><img src={src} alt="" /><button type="button" onClick={() => set('images', edit.images.filter((_, k) => k !== i))} aria-label="Retirer">×</button></div>)}</div>
       <input type="file" accept="image/*" multiple onChange={e => upload(e.target.files)} disabled={busy} /></div>
     {msg && <p className="admin-msg">{msg}</p>}
@@ -161,7 +167,7 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
   return <section className="admin-section">
     <div className="admin-row"><Button variant="couture" onClick={() => { setIsNew(true); setEdit({ ...empty, sizes: [...allSizes], sort_order: products.length + 1 }); setMsg(''); }}>+ AJOUTER UN PRODUIT</Button></div>
     <div className="admin-products">{products.map(p => <article key={p.id} className="admin-card admin-product">
-      <img src={p.images[0]} alt={p.name} /><div><strong>{p.name}</strong><p className="admin-muted">{p.sku} · {p.category} · {money(Number(p.sale_price ?? p.price))}</p><p className="admin-muted">{p.active ? 'Visible' : 'Masqué'} · {p.available ? 'Disponible' : 'Indisponible'}</p>
+      <img src={p.images[0]} alt={p.name} /><div><strong>{p.name}</strong><p className="admin-muted">{p.sku} · {p.category} · {money(Number(p.sale_price ?? p.price))}</p><p className="admin-muted">{p.active ? 'Visible' : 'Masqué'}{p.featured ? ' · Accueil' : ''} · {p.available ? 'Disponible' : 'Indisponible'}</p>
         <div className="admin-row"><Button variant="coutureOutline" onClick={() => { setIsNew(false); setEdit({ ...p, price: Number(p.price), sale_price: p.sale_price == null ? null : Number(p.sale_price) }); setMsg(''); }}>MODIFIER</Button><Button variant="tool" onClick={() => remove(p.id)}>Supprimer</Button></div></div>
     </article>)}</div>
   </section>;

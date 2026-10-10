@@ -1,14 +1,6 @@
 # JAMILA JEWELRY
-- [x] Rebrand the storefront, dialogs and page titles for luxury jewelry while preserving the design.
-- [x] Replace fashion imagery with premium jewelry imagery and place the uploaded logo and favicon.
-- [x] Verify branding, imagery and navigation on the updated storefront.
-- [x] Create the French luxury storefront with uploaded logo and four products.
-- [x] Add product details, size selection, cart and order form.
-- [x] Connect order storage if Cloud is available.
-- [x] Verify desktop and mobile shopping flows.
-- [ ] Await confirmed prices, sizes and delivery times.
-- [x] Adjust all storefront and product copy to premium selection positioning without changing design.
-
-- [x] Afficher la livraison gratuite et les garanties de paiement à la livraison.
-- [ ] Recevoir les avis clients authentiques et les conditions exactes de retour pour les publier.
-- [x] Ajouter des avis fictifs et une proposition de conditions de retour, explicitement signalés comme exemples.
+- [x] Accueil vitrine (collections, sélection 4–8, univers, avis, réassurance)
+- [x] Boutique complète avec filtres, tri, chargement progressif
+- [x] Pages collections + fiche produit par URL
+- [x] À propos, Contact, Livraison, Retours, CGV, Confidentialité
+- [x] Admin : sélection accueil, collections, avis (masquage), contenus

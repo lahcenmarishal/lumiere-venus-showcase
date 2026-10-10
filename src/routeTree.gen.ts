@@ -11,8 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BoutiqueRouteImport } from './routes/boutique'
+import { Route as ConditionsRouteImport } from './routes/conditions'
+import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as LivraisonRouteImport } from './routes/livraison'
+import { Route as RetoursRouteImport } from './routes/retours'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as CollectionsIndexRouteImport } from './routes/collections.index'
+import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
 import { Route as ProduitIdRouteImport } from './routes/produit.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -24,15 +33,60 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BoutiqueRoute = BoutiqueRouteImport.update({
+  id: '/boutique',
+  path: '/boutique',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConditionsRoute = ConditionsRouteImport.update({
+  id: '/conditions',
+  path: '/conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
+  id: '/confidentialite',
+  path: '/confidentialite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivraisonRoute = LivraisonRouteImport.update({
+  id: '/livraison',
+  path: '/livraison',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RetoursRoute = RetoursRouteImport.update({
+  id: '/retours',
+  path: '/retours',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const CollectionsIndexRoute = CollectionsIndexRouteImport.update({
+  id: '/collections/',
+  path: '/collections/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
+  id: '/collections/$slug',
+  path: '/collections/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ProduitIdRoute = ProduitIdRouteImport.update({
   id: '/produit/$id',
@@ -42,43 +96,114 @@ const ProduitIdRoute = ProduitIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
+  '/boutique': typeof BoutiqueRoute
+  '/conditions': typeof ConditionsRoute
+  '/confidentialite': typeof ConfidentialiteRoute
+  '/contact': typeof ContactRoute
+  '/livraison': typeof LivraisonRoute
+  '/retours': typeof RetoursRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
   '/produit/$id': typeof ProduitIdRoute
+  '/collections/': typeof CollectionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
+  '/boutique': typeof BoutiqueRoute
+  '/conditions': typeof ConditionsRoute
+  '/confidentialite': typeof ConfidentialiteRoute
+  '/contact': typeof ContactRoute
+  '/livraison': typeof LivraisonRoute
+  '/retours': typeof RetoursRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
   '/produit/$id': typeof ProduitIdRoute
+  '/collections': typeof CollectionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
+  '/boutique': typeof BoutiqueRoute
+  '/conditions': typeof ConditionsRoute
+  '/confidentialite': typeof ConfidentialiteRoute
+  '/contact': typeof ContactRoute
+  '/livraison': typeof LivraisonRoute
+  '/retours': typeof RetoursRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/collections/$slug': typeof CollectionsSlugRoute
   '/produit/$id': typeof ProduitIdRoute
+  '/collections/': typeof CollectionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/admin' | '/produit/$id'
+  fullPaths:
+    | '/'
+    | '/a-propos'
+    | '/auth'
+    | '/boutique'
+    | '/conditions'
+    | '/confidentialite'
+    | '/contact'
+    | '/livraison'
+    | '/retours'
+    | '/admin'
+    | '/collections/$slug'
+    | '/produit/$id'
+    | '/collections/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/admin' | '/produit/$id'
+  to:
+    | '/'
+    | '/a-propos'
+    | '/auth'
+    | '/boutique'
+    | '/conditions'
+    | '/confidentialite'
+    | '/contact'
+    | '/livraison'
+    | '/retours'
+    | '/admin'
+    | '/collections/$slug'
+    | '/produit/$id'
+    | '/collections'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/a-propos'
     | '/auth'
+    | '/boutique'
+    | '/conditions'
+    | '/confidentialite'
+    | '/contact'
+    | '/livraison'
+    | '/retours'
     | '/_authenticated/admin'
+    | '/collections/$slug'
     | '/produit/$id'
+    | '/collections/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AProposRoute: typeof AProposRoute
   AuthRoute: typeof AuthRoute
+  BoutiqueRoute: typeof BoutiqueRoute
+  ConditionsRoute: typeof ConditionsRoute
+  ConfidentialiteRoute: typeof ConfidentialiteRoute
+  ContactRoute: typeof ContactRoute
+  LivraisonRoute: typeof LivraisonRoute
+  RetoursRoute: typeof RetoursRoute
+  CollectionsSlugRoute: typeof CollectionsSlugRoute
   ProduitIdRoute: typeof ProduitIdRoute
+  CollectionsIndexRoute: typeof CollectionsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -97,11 +222,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/boutique': {
+      id: '/boutique'
+      path: '/boutique'
+      fullPath: '/boutique'
+      preLoaderRoute: typeof BoutiqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conditions': {
+      id: '/conditions'
+      path: '/conditions'
+      fullPath: '/conditions'
+      preLoaderRoute: typeof ConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confidentialite': {
+      id: '/confidentialite'
+      path: '/confidentialite'
+      fullPath: '/confidentialite'
+      preLoaderRoute: typeof ConfidentialiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livraison': {
+      id: '/livraison'
+      path: '/livraison'
+      fullPath: '/livraison'
+      preLoaderRoute: typeof LivraisonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/retours': {
+      id: '/retours'
+      path: '/retours'
+      fullPath: '/retours'
+      preLoaderRoute: typeof RetoursRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -110,6 +284,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/collections/': {
+      id: '/collections/'
+      path: '/collections'
+      fullPath: '/collections/'
+      preLoaderRoute: typeof CollectionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections/$slug': {
+      id: '/collections/$slug'
+      path: '/collections/$slug'
+      fullPath: '/collections/$slug'
+      preLoaderRoute: typeof CollectionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/produit/$id': {
       id: '/produit/$id'
@@ -135,8 +323,17 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AProposRoute: AProposRoute,
   AuthRoute: AuthRoute,
+  BoutiqueRoute: BoutiqueRoute,
+  ConditionsRoute: ConditionsRoute,
+  ConfidentialiteRoute: ConfidentialiteRoute,
+  ContactRoute: ContactRoute,
+  LivraisonRoute: LivraisonRoute,
+  RetoursRoute: RetoursRoute,
+  CollectionsSlugRoute: CollectionsSlugRoute,
   ProduitIdRoute: ProduitIdRoute,
+  CollectionsIndexRoute: CollectionsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
