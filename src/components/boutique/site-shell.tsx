@@ -52,7 +52,7 @@ export function SiteShell({ products, children, overlay = false }: { products: P
   </>;
 }
 
-export function PageHero({ eyebrow, title, intro, image }: { eyebrow: string; title: string; intro?: string; image?: string }) {
+export function PageHero({ eyebrow, title, intro, image }: { eyebrow: string; title: string; intro?: string | undefined; image?: string | undefined }) {
   return <section className={`page-hero ${image ? 'with-image' : ''}`}>
     {image && <img src={image} alt="" className="page-hero-image"/>}
     <div className="site-width page-hero-content"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1>{intro && <p>{intro}</p>}</div>

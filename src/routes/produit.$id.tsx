@@ -32,7 +32,7 @@ export const Route = createFileRoute('/produit/$id')({
 function ProductPage() {
   const { products, product } = Route.useLoaderData();
   const [img, setImg] = useState(0);
-  const [size, setSize] = useState<Size | null>(product.sizes.length === 1 ? product.sizes[0] : null);
+  const [size, setSize] = useState<Size | null>(product.sizes.length === 1 ? product.sizes[0] ?? null : null);
   const [error, setError] = useState('');
   const { cart } = useCartState();
   const similar = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);

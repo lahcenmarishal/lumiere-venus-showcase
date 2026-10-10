@@ -25,7 +25,7 @@ export function FeaturedAdmin({ products, reload }: { products: ProductRow[]; re
     reload();
   }
   async function remove(id: string) { await supabase.from('products').update({ featured: false }).eq('id', id); reload(); }
-  function move(i: number, d: number) { const ids = featured.map(p => p.id); const j = i + d; if (j < 0 || j >= ids.length) return; [ids[i], ids[j]] = [ids[j], ids[i]]; setList(ids); }
+  function move(i: number, d: number) { const ids = featured.map(p => p.id); const j = i + d; if (j < 0 || j >= ids.length) return; [ids[i], ids[j]] = [ids[j]!, ids[i]!]; setList(ids); }
   return <section className="admin-section">
     <div className="admin-card"><h2>Sélection de la page d’accueil ({featured.length}/8)</h2><p className="admin-muted">Entre 4 et 8 bijoux recommandés. Si aucun n’est choisi, la section est masquée.</p>
       {featured.length === 0 ? <p className="admin-muted">Aucun produit sélectionné.</p> : <ol className="admin-sortable">{featured.map((p, i) => <li key={p.id}><img src={p.images[0]} alt=""/><span>{p.name}</span>
@@ -97,8 +97,8 @@ export function TestimonialsAdmin() {
   }
   async function update(id: string, patch: Partial<TestimonialRow>) { await supabase.from('testimonials').update(patch).eq('id', id); load(); }
   async function remove(id: string) { if (!confirm('Supprimer cet avis ?')) return; await supabase.from('testimonials').delete().eq('id', id); load(); }
-  async function move(i: number, d: number) { const j = i + d; if (j < 0 || j >= rows.length) return; await Promise.all([supabase.from('testimonials').update({ sort_order: j + 1 }).eq('id', rows[i].id), supabase.from('testimonials').update({ sort_order: i + 1 }).eq('id', rows[j].id)]); load(); }
-  if (queue.length) return <section className="admin-section"><MaskEditor key={queue[0].name + queue.length} file={queue[0]} onDone={saveMasked} onCancel={() => setQueue(q => q.slice(1))}/>{busy && <p className="admin-muted">Envoi…</p>}</section>;
+  async function move(i: number, d: number) { const j = i + d; if (j < 0 || j >= rows.length) return; await Promise.all([supabase.from('testimonials').update({ sort_order: j + 1 }).eq('id', rows[i]!.id), supabase.from('testimonials').update({ sort_order: i + 1 }).eq('id', rows[j]!.id)]); load(); }
+  if (queue[0]) return <section className="admin-section"><MaskEditor key={queue[0].name + queue.length} file={queue[0]} onDone={saveMasked} onCancel={() => setQueue(q => q.slice(1))}/>{busy && <p className="admin-muted">Envoi…</p>}</section>;
   return <section className="admin-section">
     <div className="admin-card"><h2>Ajouter des captures d’avis</h2><p className="admin-muted">Uniquement de vrais retours clients. Chaque image passe par l’outil de masquage puis reste non publiée jusqu’à votre validation.</p><input type="file" accept="image/*" multiple onChange={e => setQueue(Array.from(e.target.files ?? []))}/></div>
     {rows.length === 0 ? <p className="admin-muted">Aucun avis pour le moment. La section est masquée sur le site.</p> : <div className="admin-products">{rows.map((t, i) => <article key={t.id} className="admin-card admin-product"><img src={t.image} alt=""/><div style={{ flex: 1 }}>
