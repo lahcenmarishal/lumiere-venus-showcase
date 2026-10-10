@@ -16,3 +16,7 @@
 - Trust information must reflect actual payment methods and supplied customer feedback; this prevents misleading commerce claims.
 - Keep illustrative reviews and proposed return terms in a separate demonstration dataset with explicit visible disclaimers; this prevents seed content from being mistaken for verified commercial claims.
 - Keep generated jewelry inspirations in a separate non-orderable presentation component when the product catalog is empty; this previews the brand without inventing saleable stock or prices.
+
+- Public pages share `SiteShell` (src/components/boutique/site-shell.tsx) for header, footer and cart; each section (boutique, collections, produit, info pages) is its own route so pages stay distinct and SEO-indexable.
+- Homepage products come only from `products.featured` ordered by `featured_order` (max 8); collections come from the `categories` table matched to `products.category` by name; brand texts live in `site_content`; reviews in `testimonials` (published flag) — all admin-managed so no static fake data.
+- Admin-uploaded site images reuse the private `product-images` bucket with long-lived signed URLs because public buckets are blocked in this workspace.
