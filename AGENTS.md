@@ -20,3 +20,5 @@
 - Public pages share `SiteShell` (src/components/boutique/site-shell.tsx) for header, footer and cart; each section (boutique, collections, produit, info pages) is its own route so pages stay distinct and SEO-indexable.
 - Homepage products come only from `products.featured` ordered by `featured_order` (max 8); collections come from the `categories` table matched to `products.category` by name; brand texts live in `site_content`; reviews in `testimonials` (published flag) — all admin-managed so no static fake data.
 - Admin-uploaded site images reuse the private `product-images` bucket with long-lived signed URLs because public buckets are blocked in this workspace.
+- Product images are an ordered gallery: index 0 is the cover and index 1 is the card hover image; this keeps admin ordering, cards and product pages consistent without duplicate fields.
+- The featured homepage selection uses Embla with touch gestures and accessible controls; this preserves admin ordering while avoiding custom carousel physics.

@@ -6,6 +6,7 @@ import { money, sizes as allSizes } from '@/data/catalog';
 import type { ProductRow } from '@/lib/products';
 import type { Database } from '@/integrations/supabase/types';
 import { FeaturedAdmin, CategoriesAdmin, TestimonialsAdmin, ContentAdmin } from '@/components/admin/site-admin';
+import { ArrowLeft, ArrowRight, Image, Layers, Trash2 } from 'lucide-react';
 
 type OrderRow = Database['public']['Tables']['orders']['Row'];
 type OrderItem = { productId: string; name: string; sku: string; size: string; quantity: number; price: number };
@@ -123,7 +124,8 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
       const { error } = await supabase.storage.from('product-images').upload(path, file, { contentType: file.type });
       if (error) { setMsg('Échec de l’envoi d’une image.'); continue; }
       const { data } = await supabase.storage.from('product-images').createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-      if (data) urls.push(data.signedUrl);
+      if (data?.signedUrl) urls.push(data.signedUrl);
+      else setMsg('La photo a été envoyée, mais son accès est indisponible. Réessayez.');
     }
     setEdit(e => e && { ...e, images: [...e.images, ...urls] }); setBusy(false);
   }
@@ -138,6 +140,16 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
   }
   async function remove(id: string) { if (!confirm('Supprimer ce produit ?')) return; await supabase.from('products').delete().eq('id', id); reload(); }
   const set = <K extends keyof typeof empty>(k: K, v: (typeof empty)[K]) => setEdit(e => e && { ...e, [k]: v });
+  function positionImage(from: number, to: number) {
+    setEdit(e => {
+      if (!e || to < 0 || to >= e.images.length) return e;
+      const images = [...e.images];
+      const moved = images.splice(from, 1)[0];
+      if (!moved) return e;
+      images.splice(to, 0, moved);
+      return { ...e, images };
+    });
+  }
 
   if (edit) return <section className="admin-section"><form className="admin-card admin-form" onSubmit={save}>
     <h2>{isNew ? 'Nouveau produit' : `Modifier ${edit.name}`}</h2>
@@ -158,8 +170,14 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
     <label>Description courte<input value={edit.description} onChange={e => set('description', e.target.value)} /></label>
     <label>Description détaillée<textarea rows={4} value={edit.detail} onChange={e => set('detail', e.target.value)} /></label>
     <div className="admin-row"><label className="admin-check"><input type="checkbox" checked={edit.available} onChange={e => set('available', e.target.checked)} />Disponible</label><label className="admin-check"><input type="checkbox" checked={edit.active} onChange={e => set('active', e.target.checked)} />Visible sur le site</label><label className="admin-check"><input type="checkbox" checked={edit.featured} onChange={e => set('featured', e.target.checked)} />Afficher sur la page d’accueil</label><label>Ordre accueil<input type="number" value={edit.featured_order} onChange={e => set('featured_order', Number(e.target.value))} style={{ width: 70 }} /></label></div>
-    <div><span className="eyebrow">Images</span><div className="admin-images">{edit.images.map((src, i) => <div key={src} className="admin-thumb"><img src={src} alt="" /><button type="button" onClick={() => set('images', edit.images.filter((_, k) => k !== i))} aria-label="Retirer">×</button></div>)}</div>
-      <input type="file" accept="image/*" multiple onChange={e => upload(e.target.files)} disabled={busy} /></div>
+    <div><span className="eyebrow">Galerie du produit</span><div className="admin-images">{edit.images.map((src, i) => <div key={`${src}-${i}`} className="admin-gallery-item"><img src={src} alt={`Photo ${i + 1}`} /><span className="admin-image-role">{i === 0 ? 'Principale' : i === 1 ? 'Survol' : `Galerie ${i + 1}`}</span><div className="admin-image-tools">
+      <Button variant="tool" type="button" disabled={busy || i === 0} onClick={() => positionImage(i, 0)} title="Photo principale" aria-label={`Définir la photo ${i + 1} comme principale`}><Image size={15}/></Button>
+      <Button variant="tool" type="button" disabled={busy || i === 0 || i === 1} onClick={() => positionImage(i, 1)} title="Photo au survol" aria-label={`Définir la photo ${i + 1} au survol`}><Layers size={15}/></Button>
+      <Button variant="tool" type="button" disabled={busy || i === 0} onClick={() => positionImage(i, i - 1)} title="Déplacer avant" aria-label={`Déplacer la photo ${i + 1} avant`}><ArrowLeft size={15}/></Button>
+      <Button variant="tool" type="button" disabled={busy || i === edit.images.length - 1} onClick={() => positionImage(i, i + 1)} title="Déplacer après" aria-label={`Déplacer la photo ${i + 1} après`}><ArrowRight size={15}/></Button>
+      <Button variant="tool" type="button" disabled={busy} onClick={() => set('images', edit.images.filter((_, k) => k !== i))} title="Retirer la photo" aria-label={`Retirer la photo ${i + 1}`}><Trash2 size={15}/></Button>
+    </div></div>)}</div>
+      <label>Ajouter des photos<input type="file" accept="image/*" multiple onChange={e => upload(e.target.files)} disabled={busy} /></label></div>
     {msg && <p className="admin-msg">{msg}</p>}
     <div className="admin-row"><Button variant="couture" type="submit" disabled={busy || edit.images.length === 0}>{busy ? 'PATIENTEZ…' : 'ENREGISTRER'}</Button><Button variant="coutureOutline" type="button" onClick={() => setEdit(null)}>ANNULER</Button></div>
   </form></section>;
