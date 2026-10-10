@@ -4,3 +4,8 @@
 - [x] Pages collections + fiche produit par URL
 - [x] À propos, Contact, Livraison, Retours, CGV, Confidentialité
 - [x] Admin : sélection accueil, collections, avis (masquage), contenus
+- [ ] Visuels premium des quatre catégories
+- [ ] Carrousel de la sélection accueil
+- [ ] Galerie admin, photo principale et photo au survol
+- [ ] Logo du pied de page réduit
+- [ ] Images accessibles sur Vercel
