@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      categories: {
+        Row: {
+          active: boolean
+          created_at: string
+          image: string
+          intro: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          image?: string
+          intro?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          image?: string
+          intro?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           address: string
@@ -64,6 +94,8 @@ export type Database = {
           cut: string
           description: string
           detail: string
+          featured: boolean
+          featured_order: number
           id: string
           images: string[]
           label: string
@@ -87,6 +119,8 @@ export type Database = {
           cut?: string
           description?: string
           detail?: string
+          featured?: boolean
+          featured_order?: number
           id: string
           images?: string[]
           label?: string
@@ -110,6 +144,8 @@ export type Database = {
           cut?: string
           description?: string
           detail?: string
+          featured?: boolean
+          featured_order?: number
           id?: string
           images?: string[]
           label?: string
@@ -122,6 +158,51 @@ export type Database = {
           sort_order?: number
           stock?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          caption: string
+          created_at: string
+          id: string
+          image: string
+          published: boolean
+          sort_order: number
+        }
+        Insert: {
+          caption?: string
+          created_at?: string
+          id?: string
+          image: string
+          published?: boolean
+          sort_order?: number
+        }
+        Update: {
+          caption?: string
+          created_at?: string
+          id?: string
+          image?: string
+          published?: boolean
+          sort_order?: number
         }
         Relationships: []
       }
