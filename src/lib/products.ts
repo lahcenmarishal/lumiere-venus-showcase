@@ -10,6 +10,6 @@ export function rowToProduct(r: ProductRow): Product {
     description: r.description, detail: r.detail, material: r.material, cut: r.cut,
     images: r.images, color: r.color, colorToken: r.color_token,
     sizes: r.sizes.filter((s): s is Size => (sizes as readonly string[]).includes(s)),
-    available: r.available, active: r.active, label: r.label,
+    available: r.available, active: r.active, label: r.label, featured: r.featured, featuredOrder: r.featured_order, sortOrder: r.sort_order,
   };
 }
