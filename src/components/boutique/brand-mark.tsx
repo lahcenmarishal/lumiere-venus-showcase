@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
-import logo from '@/assets/jamila-logo.png.asset.json';
-
-const mask = `url(${logo.url})`;
+// Served from public/ so the mark works on any host (Lovable, Vercel, …),
+// not only on Lovable's /__l5e asset CDN.
+const mask = 'url(/jamila-logo.png)';
 
 /**
  * The uploaded JAMILA JEWELRY mark, painted with the house gold gradient.
