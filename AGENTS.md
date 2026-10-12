@@ -23,3 +23,4 @@
 - Product images are an ordered gallery: index 0 is the cover and index 1 is the card hover image; this keeps admin ordering, cards and product pages consistent without duplicate fields.
 - The featured homepage selection uses Embla with touch gestures and accessible controls; this preserves admin ordering while avoiding custom carousel physics.
 - Server/CDN caching: public reads cached 60s in memory and HTML at the CDN (s-maxage=60, SWR); admin edits appear within ~1 min.
+- Store category editorials and the logo-based social preview under public images; this keeps database image paths admin-managed and sharing assets accessible on every deployment without Lovable-only CDN URLs.
