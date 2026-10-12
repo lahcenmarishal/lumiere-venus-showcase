@@ -44,12 +44,22 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// Let the CDN (Vercel/Cloudflare) serve public pages instantly while refreshing in the background.
+function withCdnCache(request: Request, response: Response): Response {
+  const path = new URL(request.url).pathname;
+  const html = (response.headers.get("content-type") ?? "").includes("text/html");
+  if (request.method !== "GET" || response.status !== 200 || !html || path.startsWith("/admin") || path.startsWith("/auth") || response.headers.has("set-cookie")) return response;
+  const res = new Response(response.body, response);
+  res.headers.set("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=86400");
+  return res;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      return withCdnCache(request, await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
