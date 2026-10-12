@@ -9,3 +9,5 @@
 - [ ] Galerie admin, photo principale et photo au survol
 - [ ] Logo du pied de page réduit
 - [ ] Images accessibles sur Vercel
+- [ ] Aperçu du lien partagé : titre et logo JAMILA JEWELRY
+- [ ] Remplacer les quatre visuels de catégories par des créations originales générées
