@@ -1,12 +1,13 @@
 import { createServerFn } from '@tanstack/react-start';
 import { publicClient } from './public-client.server';
+import { cached } from './server-cache';
 
 export type Category = { slug: string; name: string; intro: string; image: string; sortOrder: number };
 export type Testimonial = { id: string; image: string; caption: string };
 export type SiteData = { categories: Category[]; testimonials: Testimonial[]; content: Partial<Record<ContentKey, string>> };
 export type ContentKey = 'brand_since' | 'brand_clients' | 'brand_intro' | 'about_story' | 'about_vision' | 'contact_whatsapp' | 'contact_hours';
 
-export const getSiteData = createServerFn({ method: 'GET' }).handler(async (): Promise<SiteData> => {
+export const getSiteData = createServerFn({ method: 'GET' }).handler((): Promise<SiteData> => cached('site', 60_000, async (): Promise<SiteData> => {
   const c = publicClient();
   const [cats, tests, content] = await Promise.all([
     c.from('categories').select('*').eq('active', true).order('sort_order'),
@@ -19,4 +20,4 @@ export const getSiteData = createServerFn({ method: 'GET' }).handler(async (): P
     testimonials: tests.data ?? [],
     content: Object.fromEntries((content.data ?? []).map(r => [r.key, r.value])) as SiteData['content'],
   };
-});
+}));
