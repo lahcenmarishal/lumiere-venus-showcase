@@ -26,7 +26,7 @@ function item(p: Product) {
     tag('price', mad(p.price)),
     ...(p.salePrice != null && p.salePrice < p.price ? [tag('sale_price', mad(p.salePrice))] : []),
     tag('link', `${SITE}/produit/${encodeURIComponent(p.id)}`),
-    tag('image_link', abs(images[0])),
+    tag('image_link', abs(images[0] ?? '')),
     ...images.slice(1, 11).map(i => tag('additional_image_link', abs(i))),
     tag('brand', 'JAMILA JEWELRY'),
     tag('mpn', p.sku || p.id),
