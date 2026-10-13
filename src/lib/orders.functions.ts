@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
-import { unitPrice, sizes } from '@/data/catalog';
+import { deliveryFee, unitPrice, sizes } from '@/data/catalog';
 import { publicClient } from './public-client.server';
 import { rowToProduct } from './products';
 
@@ -26,7 +26,7 @@ export const submitOrder = createServerFn({ method: 'POST' })
       return { productId: p.id, sku: p.sku, name: p.name, size: item.size, quantity: item.quantity, price: unitPrice(p) };
     });
     const id = crypto.randomUUID();
-    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0) + deliveryFee;
     const { error } = await client.from('orders').insert({ id, customer_name: data.customerName, phone: data.phone, city: data.city, address: data.address, items, total });
     if (error) throw new Error('Votre demande n’a pas pu être enregistrée. Veuillez réessayer.');
     return { reference: id.slice(0, 8).toUpperCase(), total };
