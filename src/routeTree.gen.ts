@@ -22,6 +22,7 @@ import { Route as RetoursRouteImport } from './routes/retours'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as CollectionsIndexRouteImport } from './routes/collections.index'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
+import { Route as FeedsMetaCatalogDotxmlRouteImport } from './routes/feeds.meta-catalog[.]xml'
 import { Route as ProduitIdRouteImport } from './routes/produit.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -88,6 +89,11 @@ const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
   path: '/collections/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedsMetaCatalogDotxmlRoute = FeedsMetaCatalogDotxmlRouteImport.update({
+  id: '/feeds/meta-catalog.xml',
+  path: '/feeds/meta-catalog.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProduitIdRoute = ProduitIdRouteImport.update({
   id: '/produit/$id',
   path: '/produit/$id',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/retours': typeof RetoursRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/collections/$slug': typeof CollectionsSlugRoute
+  '/feeds/meta-catalog.xml': typeof FeedsMetaCatalogDotxmlRoute
   '/produit/$id': typeof ProduitIdRoute
   '/collections/': typeof CollectionsIndexRoute
 }
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/retours': typeof RetoursRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/collections/$slug': typeof CollectionsSlugRoute
+  '/feeds/meta-catalog.xml': typeof FeedsMetaCatalogDotxmlRoute
   '/produit/$id': typeof ProduitIdRoute
   '/collections': typeof CollectionsIndexRoute
 }
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/retours': typeof RetoursRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/collections/$slug': typeof CollectionsSlugRoute
+  '/feeds/meta-catalog.xml': typeof FeedsMetaCatalogDotxmlRoute
   '/produit/$id': typeof ProduitIdRoute
   '/collections/': typeof CollectionsIndexRoute
 }
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/retours'
     | '/admin'
     | '/collections/$slug'
+    | '/feeds/meta-catalog.xml'
     | '/produit/$id'
     | '/collections/'
   fileRoutesByTo: FileRoutesByTo
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/retours'
     | '/admin'
     | '/collections/$slug'
+    | '/feeds/meta-catalog.xml'
     | '/produit/$id'
     | '/collections'
   id:
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/retours'
     | '/_authenticated/admin'
     | '/collections/$slug'
+    | '/feeds/meta-catalog.xml'
     | '/produit/$id'
     | '/collections/'
   fileRoutesById: FileRoutesById
@@ -202,6 +214,7 @@ export interface RootRouteChildren {
   LivraisonRoute: typeof LivraisonRoute
   RetoursRoute: typeof RetoursRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
+  FeedsMetaCatalogDotxmlRoute: typeof FeedsMetaCatalogDotxmlRoute
   ProduitIdRoute: typeof ProduitIdRoute
   CollectionsIndexRoute: typeof CollectionsIndexRoute
 }
@@ -299,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CollectionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feeds/meta-catalog.xml': {
+      id: '/feeds/meta-catalog.xml'
+      path: '/feeds/meta-catalog.xml'
+      fullPath: '/feeds/meta-catalog.xml'
+      preLoaderRoute: typeof FeedsMetaCatalogDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/produit/$id': {
       id: '/produit/$id'
       path: '/produit/$id'
@@ -332,6 +352,7 @@ const rootRouteChildren: RootRouteChildren = {
   LivraisonRoute: LivraisonRoute,
   RetoursRoute: RetoursRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
+  FeedsMetaCatalogDotxmlRoute: FeedsMetaCatalogDotxmlRoute,
   ProduitIdRoute: ProduitIdRoute,
   CollectionsIndexRoute: CollectionsIndexRoute,
 }
