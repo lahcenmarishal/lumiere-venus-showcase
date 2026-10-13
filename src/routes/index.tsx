@@ -11,10 +11,10 @@ import heroMobile from '@/assets/jamila-hero-mobile.jpg';
 
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
-    { title: 'JAMILA JEWELRY — Bijoux élégants au Maroc' },
-    { name: 'description', content: 'Découvrez les bagues, colliers, bracelets et boucles d’oreilles JAMILA JEWELRY en acier inoxydable à 79 DH. Livraison gratuite au Maroc, paiement à la livraison.' },
-    { property: 'og:title', content: 'JAMILA JEWELRY — Bijoux élégants au Maroc' },
-    { property: 'og:description', content: 'Bagues, colliers, bracelets et boucles d’oreilles en acier inoxydable à 79 DH. Livraison gratuite au Maroc, paiement à la livraison.' },
+    { title: 'JAMILA JEWELRY — Bijoux de luxe · Livraison partout au Maroc' },
+    { name: 'description', content: 'Découvrez les bagues, colliers, bracelets et boucles d’oreilles JAMILA JEWELRY en acier inoxydable à 79 DH. Livraison partout au Maroc, paiement à la livraison.' },
+    { property: 'og:title', content: 'JAMILA JEWELRY — Bijoux de luxe · Livraison partout au Maroc' },
+    { property: 'og:description', content: 'Bagues, colliers, bracelets et boucles d’oreilles en acier inoxydable à 79 DH. Livraison partout au Maroc, paiement à la livraison.' },
     { property: 'og:site_name', content: 'JAMILA JEWELRY' },
     { property: 'og:locale', content: 'fr_MA' },
     { property: 'og:url', content: 'https://www.jamila-jewelry.com/' },
@@ -26,8 +26,8 @@ export const Route = createFileRoute('/')({
     { property: 'og:image:alt', content: 'Logo doré JAMILA JEWELRY sur fond noir' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: 'JAMILA JEWELRY — Bijoux élégants au Maroc' },
-    { name: 'twitter:description', content: 'Bijoux en acier inoxydable à 79 DH. Livraison gratuite au Maroc, paiement à la livraison.' },
+    { name: 'twitter:title', content: 'JAMILA JEWELRY — Bijoux de luxe · Livraison partout au Maroc' },
+    { name: 'twitter:description', content: 'Bijoux en acier inoxydable à 79 DH. Livraison partout au Maroc, paiement à la livraison.' },
     { name: 'twitter:image', content: 'https://www.jamila-jewelry.com/images/jamila-jewelry-share.jpg' },
     { name: 'twitter:image:alt', content: 'Logo doré JAMILA JEWELRY sur fond noir' },
   ], links: [{ rel: 'canonical', href: 'https://www.jamila-jewelry.com/' }] }),
@@ -65,7 +65,7 @@ function Home() {
     {site.testimonials.length > 0 && <section className="review-band site-width"><span className="eyebrow text-primary">LA PAROLE À NOS CLIENTES</span><h2>Avis clients</h2><p>Retours partagés par nos clientes.</p><TestimonialGallery items={site.testimonials}/></section>}
 
     <section className="trust-band"><div className="site-width trust-grid four">
-      <div className="trust-item"><Truck/><h3>Livraison au Maroc</h3><p>Livraison gratuite partout au Maroc, sans minimum d’achat.</p><Link className="couture-tool" to="/livraison">En savoir plus</Link></div>
+      <div className="trust-item"><Truck/><h3>Livraison au Maroc</h3><p>Livraison partout au Maroc, sans minimum d’achat.</p><Link className="couture-tool" to="/livraison">En savoir plus</Link></div>
       <div className="trust-item"><CreditCard/><h3>Paiement à la livraison</h3><p>Aucun paiement en ligne : vous réglez à la réception.</p><Link className="couture-tool" to="/conditions">Conditions de vente</Link></div>
       <div className="trust-item"><RotateCcw/><h3>Retours & échanges</h3><p>Selon la politique de la boutique, sur simple demande.</p><Link className="couture-tool" to="/retours">Consulter</Link></div>
       <div className="trust-item"><Headphones/><h3>Service client</h3><p>Une question ? Notre équipe vous répond sur WhatsApp.</p><Link className="couture-tool" to="/contact">Nous contacter</Link></div>

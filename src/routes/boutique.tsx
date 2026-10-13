@@ -9,7 +9,7 @@ export const Route = createFileRoute('/boutique')({
     { title: 'Boutique — Tous les bijoux | JAMILA JEWELRY' },
     { name: 'description', content: 'Le catalogue complet JAMILA JEWELRY : bagues, colliers, bracelets et boucles d’oreilles. Filtres par catégorie, prix et style.' },
     { property: 'og:title', content: 'La boutique JAMILA JEWELRY' },
-    { property: 'og:description', content: 'Tous nos bijoux, livrés gratuitement au Maroc.' },
+    { property: 'og:description', content: 'Tous nos bijoux, livrés partout au Maroc.' },
     { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' },
   ] }),
   loader: async () => { const [products, site] = await Promise.all([listProducts(), getSiteData()]); return { products, site }; },

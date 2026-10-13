@@ -22,7 +22,7 @@ export const Route = createFileRoute('/produit/$id')({
     const p = loaderData?.product;
     if (!p) return { meta: [{ title: 'Pièce introuvable — JAMILA JEWELRY' }, { name: 'robots', content: 'noindex' }] };
     const title = `${p.name} — ${p.category} | JAMILA JEWELRY`;
-    const desc = `${p.description} ${p.material}. ${money(unitPrice(p))}, livraison gratuite au Maroc.`;
+    const desc = `${p.description} ${p.material}. ${money(unitPrice(p))}, livraison partout au Maroc.`;
     return { meta: [{ title }, { name: 'description', content: desc }, { property: 'og:title', content: title }, { property: 'og:description', content: desc }, { property: 'og:type', content: 'product' }, { name: 'twitter:card', content: 'summary_large_image' }] };
   },
   notFoundComponent: () => <p style={{ padding: 40, textAlign: 'center' }}>Cette pièce n’existe pas ou n’est plus disponible. <Link to="/boutique">Voir la boutique</Link></p>,
@@ -57,7 +57,7 @@ function ProductPage() {
           <div className="size-buttons">{product.sizes.map(s => <Button key={s} variant="coutureOutline" className={`size-button ${size === s ? 'selected' : ''}`} onClick={() => { setSize(s); setError(''); }} aria-pressed={size === s}>{s}</Button>)}</div>
           {error && <p className="error-note" role="alert">{error}</p>}
           <div className="detail-cta"><Button variant="couture" onClick={add} disabled={!product.available}>AJOUTER AU PANIER <ArrowRight/></Button><Button variant="coutureOutline" onClick={() => openWhatsApp(product)}><WhatsAppIcon/> COMMANDER VIA WHATSAPP</Button></div>
-          <ul className="detail-perks"><li><Truck/> Livraison gratuite partout au Maroc</li><li><CreditCard/> Paiement à la livraison</li><li><RotateCcw/> <Link to="/retours">Retours & échanges</Link></li></ul>
+          <ul className="detail-perks"><li><Truck/> Livraison partout au Maroc</li><li><CreditCard/> Paiement à la livraison</li><li><RotateCcw/> <Link to="/retours">Retours & échanges</Link></li></ul>
         </div>
       </div>
       {similar.length > 0 && <section className="similar"><div className="section-head"><span className="eyebrow">VOUS AIMEREZ AUSSI</span><h2>Dans la même collection</h2></div><div className="product-grid">{similar.map(p => <ProductCard key={p.id} product={p}/>)}</div></section>}
