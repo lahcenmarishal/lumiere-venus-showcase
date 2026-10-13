@@ -16,7 +16,7 @@ export const Route = createFileRoute('/contact')({
 
 function Contact() {
   const { products, site } = Route.useLoaderData();
-  const wa = site.content.contact_whatsapp || '212671588356';
+  const wa = site.content.contact_whatsapp || '212717055482';
   const display = wa.replace(/^212/, '0').replace(/(\d{2})(?=\d)/g, '$1 ');
   const [sent, setSent] = useState(false);
   function submit(e: FormEvent<HTMLFormElement>) {
@@ -31,7 +31,7 @@ function Contact() {
         <div><WhatsAppIcon/><h3>WhatsApp</h3><p><a href={`https://wa.me/${wa}`} target="_blank" rel="noopener">{display}</a></p></div>
         <div><Phone/><h3>Téléphone</h3><p><a href={`tel:+${wa}`}>{display}</a></p></div>
         {site.content.contact_hours && <div><Clock/><h3>Horaires</h3><p>{site.content.contact_hours}</p></div>}
-        <div><MapPin/><h3>Livraison</h3><p>Partout au Maroc, gratuitement.</p></div>
+        <div><MapPin/><h3>Livraison</h3><p>Partout au Maroc.</p></div>
       </div>
       <form className="contact-form" onSubmit={submit}>
         <h2>Écrivez-nous</h2><p>Votre message s’ouvrira dans WhatsApp, prêt à être envoyé.</p>

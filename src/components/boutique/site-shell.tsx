@@ -25,7 +25,7 @@ export function SiteShell({ products, children, overlay = false }: { products: P
   const count = cart.reduce((s, i) => s + i.quantity, 0);
   const whatsapp = () => { openWhatsApp(); };
   return <>
-    <div className="announcement"><span>LIVRAISON GRATUITE AU MAROC</span><span className="separator">✦</span><span>PAIEMENT À LA LIVRAISON</span></div>
+    <div className="announcement"><span>LIVRAISON PARTOUT AU MAROC</span><span className="separator">✦</span><span>PAIEMENT À LA LIVRAISON</span></div>
     <header className={`header ${overlay ? '' : 'solid'} ${scrolled ? 'scrolled' : ''}`}><div className="site-width header-inner">
       <Link className="brand" to="/" aria-label="JAMILA JEWELRY — Accueil"><BrandMark decorative label="Jamila Jewelry"/></Link>
       <nav className="navigation" aria-label="Navigation principale">{nav.map(n => <Link key={n.to} to={n.to} activeOptions={{ exact: n.to === '/' }} activeProps={{ className: 'nav-active' }}>{n.label}</Link>)}</nav>
