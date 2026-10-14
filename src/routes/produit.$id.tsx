@@ -4,7 +4,7 @@ import { ArrowRight, Truck, CreditCard, RotateCcw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { listProducts } from '@/lib/products.functions';
 import { CartDialog, WhatsAppIcon, openWhatsApp } from '@/components/boutique/commerce-dialogs';
-import { useCartState, setCartState } from '@/lib/cart-store';
+import { useCartState, setCartState, addToCart } from '@/lib/cart-store';
 import { money, unitPrice, type Size } from '@/data/catalog';
 
 const slugOf = (name: string) => name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -35,8 +35,8 @@ function ProductPage() {
   const { cart, cartOpen } = useCartState();
   function add() {
     if (!size) { setError('Veuillez sélectionner votre dimension.'); return; }
-    const ex = cart.find(i => i.productId === product.id && i.size === size);
-    setCartState({ cart: ex ? cart.map(i => i === ex ? { ...i, quantity: Math.min(10, i.quantity + 1) } : i) : [...cart, { productId: product.id, size, quantity: 1 }], cartOpen: true });
+    if (!addToCart(product, size)) { setError('La quantité maximale pour cette dimension est déjà dans votre panier.'); return; }
+    setError('');
   }
   return <>
     <main className="product-page product-focus" key={product.id}>
