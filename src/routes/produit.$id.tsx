@@ -1,11 +1,10 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import { useState } from 'react';
-import { ArrowRight, Truck, CreditCard, RotateCcw } from 'lucide-react';
+import { ArrowRight, Truck, CreditCard, RotateCcw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { listProducts } from '@/lib/products.functions';
-import { SiteShell } from '@/components/boutique/site-shell';
 import { ProductCard } from '@/components/boutique/catalog';
-import { WhatsAppIcon, openWhatsApp } from '@/components/boutique/commerce-dialogs';
+import { CartDialog, WhatsAppIcon, openWhatsApp } from '@/components/boutique/commerce-dialogs';
 import { useCartState, setCartState } from '@/lib/cart-store';
 import { money, unitPrice, type Size } from '@/data/catalog';
 
@@ -34,20 +33,20 @@ function ProductPage() {
   const [img, setImg] = useState(0);
   const [size, setSize] = useState<Size | null>(product.sizes.length === 1 ? product.sizes[0] ?? null : null);
   const [error, setError] = useState('');
-  const { cart } = useCartState();
+  const { cart, cartOpen } = useCartState();
   const similar = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
   function add() {
     if (!size) { setError('Veuillez sélectionner votre dimension.'); return; }
     const ex = cart.find(i => i.productId === product.id && i.size === size);
     setCartState({ cart: ex ? cart.map(i => i === ex ? { ...i, quantity: Math.min(10, i.quantity + 1) } : i) : [...cart, { productId: product.id, size, quantity: 1 }], cartOpen: true });
   }
-  return <SiteShell products={products}>
-    <div className="product-page" key={product.id}>
-      <nav className="site-width breadcrumb" aria-label="Fil d’Ariane"><Link to="/">Accueil</Link> / <Link to="/boutique">Boutique</Link> / <Link to="/collections/$slug" params={{ slug: slugOf(product.category) }}>{product.category}</Link> / <span>{product.name}</span></nav>
+  return <>
+    <main className="product-page product-focus" key={product.id}>
       <div className="product-presentation"><div className="product-page-grid">
         <div className="gallery"><div className="gallery-main"><img src={product.images[img] ?? product.images[0]} alt={product.name}/></div>
           {product.images.length > 1 && <div className="gallery-thumbs">{product.images.map((src, i) => <Button variant="tool" type="button" key={`${src}-${i}`} className={i === img ? 'active' : ''} onClick={() => setImg(i)} aria-pressed={i === img} aria-label={`Photo ${i + 1}`}><img src={src} alt=""/></Button>)}</div>}</div>
         <div className="detail-info">
+          <Button variant="tool" className="product-close" asChild><Link to="/boutique" aria-label="Fermer la fiche produit"><X size={18}/></Link></Button>
           {product.label && <span className="eyebrow text-primary">{product.label}</span>}
           <h1>{product.name}</h1>
           <div className="detail-price">{product.salePrice != null && <s>{money(product.price)}</s>} {money(unitPrice(product))}</div>
@@ -58,9 +57,11 @@ function ProductPage() {
           {error && <p className="error-note" role="alert">{error}</p>}
           <div className="detail-cta"><Button variant="couture" onClick={add} disabled={!product.available}>AJOUTER AU PANIER <ArrowRight/></Button><Button variant="coutureOutline" onClick={() => openWhatsApp(product)}><WhatsAppIcon/> COMMANDER VIA WHATSAPP</Button></div>
           <ul className="detail-perks"><li><Truck/> Livraison partout au Maroc</li><li><CreditCard/> Paiement à la livraison</li><li><RotateCcw/> <Link to="/retours">Retours & échanges</Link></li></ul>
+          <nav className="breadcrumb" aria-label="Fil d’Ariane"><Link to="/">Accueil</Link> / <Link to="/boutique">Boutique</Link> / <Link to="/collections/$slug" params={{ slug: slugOf(product.category) }}>{product.category}</Link> / <span>{product.name}</span></nav>
+          {similar.length > 0 && <section className="similar"><div className="section-head"><span className="eyebrow">VOUS AIMEREZ AUSSI</span><h2>Dans la même collection</h2></div><div className="product-grid">{similar.map(p => <ProductCard key={p.id} product={p}/>)}</div></section>}
         </div>
       </div></div>
-      {similar.length > 0 && <section className="site-width similar"><div className="section-head"><span className="eyebrow">VOUS AIMEREZ AUSSI</span><h2>Dans la même collection</h2></div><div className="product-grid">{similar.map(p => <ProductCard key={p.id} product={p}/>)}</div></section>}
-    </div>
-  </SiteShell>;
+    </main>
+    <CartDialog products={products} open={cartOpen} onClose={() => setCartState({ cartOpen: false })} items={cart} setItems={items => setCartState({ cart: items })}/>
+  </>;
 }
