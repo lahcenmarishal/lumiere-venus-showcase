@@ -299,20 +299,16 @@ button { cursor:pointer; } a:focus-visible { outline:2px solid var(--gold); outl
 .product-focus .detail-info { position:relative; padding-top:28px; }
 .product-close { position:absolute; top:10px; right:10px; width:24px; height:24px; z-index:1; color:var(--muted-foreground); }
 .product-focus .breadcrumb { margin:28px 0 0; line-height:1.8; }
-.product-focus .similar { margin-top:36px; }
-.product-focus .similar .section-head h2 { font-size:28px; }
-.product-focus .similar .product-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-.product-focus .similar .product-actions { flex-direction:column; }
 @media(max-width:760px) {
  .product-focus { padding:0; }
  .product-focus .product-presentation { padding:12px; align-items:start; }
  .product-focus .product-page-grid { height:auto; }
- .product-focus .detail-info { padding-top:28px; }
+ .product-focus .detail-info { padding-top:12px; }
+ .product-close { position:fixed; top:12px; right:12px; width:38px; height:38px; padding:0; display:grid; place-items:center; border-radius:50%; background:var(--background); border:1px solid var(--border); color:var(--foreground); z-index:5; box-shadow:0 2px 14px rgb(0 0 0 / .28); }
 }
 .detail-price s { color:var(--muted-foreground); font-size:.8em; margin-right:8px; }
 .detail-perks { list-style:none; padding:22px 0 0; margin:22px 0 0; border-top:1px solid var(--border); display:grid; gap:12px; font-size:12px; }
 .detail-perks li { display:flex; gap:10px; align-items:center; } .detail-perks svg { width:16px; height:16px; color:var(--primary); } .detail-perks a { text-decoration:underline; }
-.similar { margin-top:90px; }
 .info-body { max-width:760px; padding:64px 0 90px; font-size:14px; line-height:1.95; }
 .info-body h2 { font-size:30px; margin:34px 0 10px; } .info-body h2:first-child { margin-top:0; } .info-body p { color:var(--muted-foreground); } .info-body a { text-decoration:underline; color:var(--primary); }
 .info-body .return-examples { padding-left:18px; } .info-body .return-examples h3 { font-size:22px; margin-top:18px; }
