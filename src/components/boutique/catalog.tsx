@@ -2,17 +2,26 @@ import { Link } from '@tanstack/react-router';
 import { useMemo, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { money, unitPrice, type Product } from '@/data/catalog';
+import { money, unitPrice, type Product, type Size } from '@/data/catalog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { addToCart } from '@/lib/cart-store';
 
 export function ProductCard({ product }: { product: Product }) {
+  const [chooseSize, setChooseSize] = useState(false);
+  function add(size?: Size) {
+    if (!size) { setChooseSize(true); return; }
+    addToCart(product, size);
+    setChooseSize(false);
+  }
   return <article>
     <div className={`product-photo ${product.images[1] ? 'has-hover' : ''}`}><Link to="/produit/$id" params={{ id: product.id }} className="photo-trigger" aria-label={`Voir ${product.name}`}><img className="product-primary-image" src={product.images[0]} alt={product.name} loading="lazy" width={600} height={600}/>{product.images[1] && <img className="product-hover-image" src={product.images[1]} alt="" aria-hidden="true" loading="lazy" width={600} height={600}/>}</Link>{product.label && <span className="product-tag">{product.label}</span>}</div>
     <div className="product-caption"><h3>{product.name}</h3><span className="product-price">{money(unitPrice(product))}</span></div>
     <p className="product-desc">{product.description}</p>
     <div className="product-actions">
       <Button variant="coutureOutline" asChild><Link to="/produit/$id" params={{ id: product.id }}>VOIR LES DÉTAILS <ArrowUpRight size={12}/></Link></Button>
-      <Button variant="couture" asChild><Link to="/produit/$id" params={{ id: product.id }}>COMMANDER</Link></Button>
+      <Button variant="couture" disabled={!product.available || product.sizes.length === 0} onClick={() => add(product.sizes.length === 1 ? product.sizes[0] : undefined)}>AJOUTER AU PANIER</Button>
     </div>
+    <Dialog open={chooseSize} onOpenChange={setChooseSize}><DialogContent className="boutique-dialog small-dialog"><DialogTitle>{product.name}</DialogTitle><DialogDescription>Choisissez votre dimension</DialogDescription><div className="size-buttons catalog-size-options">{product.sizes.map(size => <Button key={size} variant="coutureOutline" className="size-button" onClick={() => add(size)}>{size}</Button>)}</div></DialogContent></Dialog>
   </article>;
 }
 
