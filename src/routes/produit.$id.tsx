@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ArrowRight, Truck, CreditCard, RotateCcw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { listProducts } from '@/lib/products.functions';
-import { ProductCard } from '@/components/boutique/catalog';
 import { CartDialog, WhatsAppIcon, openWhatsApp } from '@/components/boutique/commerce-dialogs';
 import { useCartState, setCartState } from '@/lib/cart-store';
 import { money, unitPrice, type Size } from '@/data/catalog';
