@@ -5,4 +5,3 @@ export type Product = { id: string; sku: string; name: string; category: string;
 export const money = (amount: number) => `${new Intl.NumberFormat('fr-MA').format(amount)} DH`;
 export type CartItem = { productId: string; size: Size; quantity: number };
 export const unitPrice = (p: Product) => p.salePrice ?? p.price;
-export const deliveryFee = 30;
