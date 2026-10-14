@@ -2,7 +2,7 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 import { useServerFn } from '@tanstack/react-start';
 import { Check, Truck, CreditCard, PhoneCall, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { deliveryFee, money, unitPrice, type CartItem, type Product } from '@/data/catalog';
+import { money, unitPrice, type CartItem, type Product } from '@/data/catalog';
 import { submitOrder } from '@/lib/orders.functions';
 import { trackPurchase } from '@/lib/pixel';
 
@@ -42,11 +42,11 @@ export function QuickOrderForm({ items, products, onSuccess, onContinue, title =
     <label>Adresse<textarea name="address" autoComplete="street-address" required minLength={5} maxLength={400} rows={2} placeholder="Rue, numéro, quartier…" disabled={pending}/></label>
     <div className="quick-order-summary">
       <div><span>Articles</span><span>{money(subtotal)}</span></div>
-      <div><span>Livraison</span><span>{money(deliveryFee)}</span></div>
-      <div className="total"><span>Total à la livraison</span><strong>{money(subtotal + deliveryFee)}</strong></div>
+      <div className="total"><span>Total des articles</span><strong>{money(subtotal)}</strong></div>
     </div>
     {error && <p className="error-note" role="alert">{error}</p>}
     <Button type="submit" variant="couture" className="w-full" disabled={pending}>{pending ? 'ENVOI…' : 'CONFIRMER MA COMMANDE'} <Check size={16}/></Button>
+    <p className="quick-order-note">Notre équipe vous contactera pour confirmer votre commande et les frais de livraison.</p>
     <p className="quick-order-secure"><ShieldCheck size={14}/> Aucun paiement en ligne · vos données restent privées</p>
   </form>;
 }
