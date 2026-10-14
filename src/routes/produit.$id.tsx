@@ -33,7 +33,6 @@ function ProductPage() {
   const [size, setSize] = useState<Size | null>(product.sizes.length === 1 ? product.sizes[0] ?? null : null);
   const [error, setError] = useState('');
   const { cart, cartOpen } = useCartState();
-  const similar = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
   function add() {
     if (!size) { setError('Veuillez sélectionner votre dimension.'); return; }
     const ex = cart.find(i => i.productId === product.id && i.size === size);
