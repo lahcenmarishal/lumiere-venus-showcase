@@ -42,9 +42,9 @@ function ProductPage() {
     setCartState({ cart: ex ? cart.map(i => i === ex ? { ...i, quantity: Math.min(10, i.quantity + 1) } : i) : [...cart, { productId: product.id, size, quantity: 1 }], cartOpen: true });
   }
   return <SiteShell products={products}>
-    <div className="site-width product-page" key={product.id}>
-      <nav className="breadcrumb" aria-label="Fil d’Ariane"><Link to="/">Accueil</Link> / <Link to="/boutique">Boutique</Link> / <Link to="/collections/$slug" params={{ slug: slugOf(product.category) }}>{product.category}</Link> / <span>{product.name}</span></nav>
-      <div className="product-page-grid">
+    <div className="product-page" key={product.id}>
+      <nav className="site-width breadcrumb" aria-label="Fil d’Ariane"><Link to="/">Accueil</Link> / <Link to="/boutique">Boutique</Link> / <Link to="/collections/$slug" params={{ slug: slugOf(product.category) }}>{product.category}</Link> / <span>{product.name}</span></nav>
+      <div className="product-presentation"><div className="product-page-grid">
         <div className="gallery"><div className="gallery-main"><img src={product.images[img] ?? product.images[0]} alt={product.name}/></div>
           {product.images.length > 1 && <div className="gallery-thumbs">{product.images.map((src, i) => <Button variant="tool" type="button" key={`${src}-${i}`} className={i === img ? 'active' : ''} onClick={() => setImg(i)} aria-pressed={i === img} aria-label={`Photo ${i + 1}`}><img src={src} alt=""/></Button>)}</div>}</div>
         <div className="detail-info">
@@ -59,8 +59,8 @@ function ProductPage() {
           <div className="detail-cta"><Button variant="couture" onClick={add} disabled={!product.available}>AJOUTER AU PANIER <ArrowRight/></Button><Button variant="coutureOutline" onClick={() => openWhatsApp(product)}><WhatsAppIcon/> COMMANDER VIA WHATSAPP</Button></div>
           <ul className="detail-perks"><li><Truck/> Livraison partout au Maroc</li><li><CreditCard/> Paiement à la livraison</li><li><RotateCcw/> <Link to="/retours">Retours & échanges</Link></li></ul>
         </div>
-      </div>
-      {similar.length > 0 && <section className="similar"><div className="section-head"><span className="eyebrow">VOUS AIMEREZ AUSSI</span><h2>Dans la même collection</h2></div><div className="product-grid">{similar.map(p => <ProductCard key={p.id} product={p}/>)}</div></section>}
+      </div></div>
+      {similar.length > 0 && <section className="site-width similar"><div className="section-head"><span className="eyebrow">VOUS AIMEREZ AUSSI</span><h2>Dans la même collection</h2></div><div className="product-grid">{similar.map(p => <ProductCard key={p.id} product={p}/>)}</div></section>}
     </div>
   </SiteShell>;
 }

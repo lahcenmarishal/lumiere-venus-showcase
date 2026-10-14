@@ -21,6 +21,7 @@
 - Homepage products come only from `products.featured` ordered by `featured_order` (max 8); collections come from the `categories` table matched to `products.category` by name; brand texts live in `site_content`; reviews in `testimonials` (published flag) — all admin-managed so no static fake data.
 - Admin-uploaded site images reuse the private `product-images` bucket with long-lived signed URLs because public buckets are blocked in this workspace.
 - Product images are an ordered gallery: index 0 is the cover and index 1 is the card hover image; this keeps admin ordering, cards and product pages consistent without duplicate fields.
+- Product detail URLs remain standalone pages inside SiteShell with a reference-style two-column presentation and independently scrollable desktop details; this preserves deep links and existing commerce behavior without introducing modal routing.
 - The featured homepage selection uses Embla with touch gestures and accessible controls; this preserves admin ordering while avoiding custom carousel physics.
 - Server/CDN caching: public reads cached 60s in memory and HTML at the CDN (s-maxage=60, SWR); admin edits appear within ~1 min.
 - Store category editorials and the logo-based social preview under public images; this keeps database image paths admin-managed and sharing assets accessible on every deployment without Lovable-only CDN URLs.
