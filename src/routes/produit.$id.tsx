@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ArrowRight, Truck, CreditCard, RotateCcw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { listProducts } from '@/lib/products.functions';
-import { ProductCard } from '@/components/boutique/catalog';
 import { CartDialog, WhatsAppIcon, openWhatsApp } from '@/components/boutique/commerce-dialogs';
 import { useCartState, setCartState } from '@/lib/cart-store';
 import { money, unitPrice, type Size } from '@/data/catalog';
@@ -34,7 +33,6 @@ function ProductPage() {
   const [size, setSize] = useState<Size | null>(product.sizes.length === 1 ? product.sizes[0] ?? null : null);
   const [error, setError] = useState('');
   const { cart, cartOpen } = useCartState();
-  const similar = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
   function add() {
     if (!size) { setError('Veuillez sélectionner votre dimension.'); return; }
     const ex = cart.find(i => i.productId === product.id && i.size === size);
@@ -58,7 +56,6 @@ function ProductPage() {
           <div className="detail-cta"><Button variant="couture" onClick={add} disabled={!product.available}>AJOUTER AU PANIER <ArrowRight/></Button><Button variant="coutureOutline" onClick={() => openWhatsApp(product)}><WhatsAppIcon/> COMMANDER VIA WHATSAPP</Button></div>
           <ul className="detail-perks"><li><Truck/> Livraison partout au Maroc</li><li><CreditCard/> Paiement à la livraison</li><li><RotateCcw/> <Link to="/retours">Retours & échanges</Link></li></ul>
           <nav className="breadcrumb" aria-label="Fil d’Ariane"><Link to="/">Accueil</Link> / <Link to="/boutique">Boutique</Link> / <Link to="/collections/$slug" params={{ slug: slugOf(product.category) }}>{product.category}</Link> / <span>{product.name}</span></nav>
-          {similar.length > 0 && <section className="similar"><div className="section-head"><span className="eyebrow">VOUS AIMEREZ AUSSI</span><h2>Dans la même collection</h2></div><div className="product-grid">{similar.map(p => <ProductCard key={p.id} product={p}/>)}</div></section>}
         </div>
       </div></div>
     </main>
