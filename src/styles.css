@@ -395,6 +395,8 @@ button { cursor:pointer; } a:focus-visible { outline:2px solid var(--gold); outl
 .featured-arrow svg { width:18px; }
 .product-photo .product-hover-image { position:absolute; inset:0; opacity:0; transition:opacity .5s,transform .7s; }
 @media(hover:hover) { .has-hover:hover .product-hover-image, .has-hover:focus-within .product-hover-image { opacity:1; } }
+@media(hover:none) and (prefers-reduced-motion:no-preference) { .has-hover .product-hover-image { animation:touch-photo-swap 7s ease-in-out infinite; } }
+@keyframes touch-photo-swap { 0%,42% { opacity:0; } 52%,88% { opacity:1; } 100% { opacity:0; } }
 .footer .footer-logo { width:168px; height:84px; }
 .gallery-thumbs { flex-wrap:wrap; }
 .gallery-thumbs button { flex-shrink:0; }
