@@ -193,6 +193,9 @@ button { cursor:pointer; } a:focus-visible { outline:2px solid var(--gold); outl
 @media(max-width:760px) { .review-examples { grid-template-columns:1fr; width:100%; } }
 .cart-delivery { display:flex; justify-content:space-between; align-items:center; font-size:12px; margin:15px 0; }
 .cart-delivery strong { color:var(--primary); font-weight:600; }
+.cart-continue { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:14px; padding:16px 0 2px; border-top:1px solid var(--border); border-radius:0; background:none; font-family:var(--font-display); font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted-foreground); }
+.cart-continue:hover, .cart-continue:focus-visible { background:none; color:var(--primary); }
+.cart-continue svg { width:14px; height:14px; }
 @media(max-width:760px) { .trust-grid { grid-template-columns:1fr; gap:28px; } .trust-item + .trust-item { padding-top:26px; border-top:1px solid var(--border); } .trust-band { padding:38px 0; } .trust-band > .site-width > h2 { font-size:34px; } .reassurance { gap:14px 20px; } }
 
 /* Jewelry identity: retain the existing couture layout. */
