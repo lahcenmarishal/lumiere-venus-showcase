@@ -9,7 +9,7 @@ import { FeaturedAdmin, CategoriesAdmin, TestimonialsAdmin, ContentAdmin } from 
 import { ArrowLeft, ArrowRight, Image, Layers, Trash2 } from 'lucide-react';
 
 type OrderRow = Database['public']['Tables']['orders']['Row'];
-type OrderItem = { productId: string; name: string; sku: string; size: string; quantity: number; price: number };
+type OrderItem = { productId: string; name: string; sku: string; size: string; quantity: number; price: number; image?: string };
 const statuses: Record<string, string> = { pending: 'En attente', confirmed: 'Confirmée', shipped: 'Expédiée', delivered: 'Livrée', cancelled: 'Annulée' };
 const tokens = ['turquoise', 'rouge', 'magenta', 'noire'];
 
@@ -54,7 +54,7 @@ function AdminPage() {
       <div className="admin-header-tools"><a href="/" className="couture-tool">Voir le site</a><Button variant="coutureOutline" onClick={signOut}>DÉCONNEXION</Button></div></header>
     <nav className="admin-tabs">{([['stats', 'Statistiques'], ['orders', `Commandes (${orders.length})`], ['products', `Produits (${products.length})`], ['featured', 'Sélection accueil'], ['categories', 'Collections'], ['testimonials', 'Avis clients'], ['content', 'Contenus']] as const).map(([k, l]) => <Button key={k} variant="tool" className={tab === k ? 'active' : ''} onClick={() => setTab(k)}>{l}</Button>)}</nav>
     {tab === 'stats' && <Stats orders={orders} />}
-    {tab === 'orders' && <Orders orders={orders} reload={load} />}
+    {tab === 'orders' && <Orders orders={orders} products={products} reload={load} />}
     {tab === 'products' && <Products products={products} reload={load} />}
     {tab === 'featured' && <FeaturedAdmin products={products} reload={load} />}
     {tab === 'categories' && <CategoriesAdmin />}
@@ -89,8 +89,9 @@ function Stats({ orders }: { orders: OrderRow[] }) {
 }
 function Kpi({ label, value }: { label: string; value: string }) { return <div className="admin-card admin-kpi"><span>{label}</span><strong>{value}</strong></div>; }
 
-function Orders({ orders, reload }: { orders: OrderRow[]; reload: () => void }) {
+function Orders({ orders, products, reload }: { orders: OrderRow[]; products: ProductRow[]; reload: () => void }) {
   const [filter, setFilter] = useState('all');
+  const imageByProduct = useMemo(() => new Map(products.map(p => [p.id, p.images[0] ?? ''])), [products]);
   async function setStatus(id: string, status: string) { await supabase.from('orders').update({ status }).eq('id', id); reload(); }
   async function removeOrder(id: string) { if (!confirm('Supprimer définitivement cette commande ?')) return; await supabase.from('orders').delete().eq('id', id); reload(); }
   const list = orders.filter(o => filter === 'all' || o.status === filter);
@@ -100,7 +101,10 @@ function Orders({ orders, reload }: { orders: OrderRow[]; reload: () => void }) 
       <div className="admin-order-head"><div><strong>#{o.id.slice(0, 8).toUpperCase()}</strong><span className="admin-muted"> · {new Date(o.created_at).toLocaleString('fr-MA')}</span></div>
         <select value={o.status} onChange={e => setStatus(o.id, e.target.value)}>{Object.entries(statuses).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></div>
       <p><strong>{o.customer_name}</strong> · <a href={`tel:${o.phone}`}>{o.phone}</a> · {o.city}</p><p className="admin-muted">{o.address}</p>
-      <ul>{(o.items as OrderItem[]).map((i, k) => <li key={k}>{i.quantity} × {i.name} ({i.sku}) — taille {i.size} — {money(i.price * i.quantity)}</li>)}</ul>
+      <ul className="admin-order-items">{(o.items as OrderItem[]).map((i, k) => <li key={k} className="admin-order-item">
+        <span className="admin-order-thumb">{(i.image || imageByProduct.get(i.productId)) ? <img src={i.image || imageByProduct.get(i.productId) || ''} alt={i.name} /> : <span aria-hidden="true">{i.name.slice(0, 1).toUpperCase()}</span>}</span>
+        <span className="admin-order-item-text"><strong>{i.quantity} × {i.name}</strong><span className="admin-muted">({i.sku}) — taille {i.size} — {money(i.price * i.quantity)}</span></span>
+      </li>)}</ul>
       <p className="admin-total">Total : {money(Number(o.total))}</p>
       <div className="admin-row"><Button variant="tool" onClick={() => removeOrder(o.id)}>Supprimer la commande</Button></div>
     </article>)}
