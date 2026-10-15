@@ -13,7 +13,7 @@ const orderSchema = z.object({
 });
 
 export const submitOrder = createServerFn({ method: 'POST' })
-  .inputValidator((input: unknown) => orderSchema.parse(input))
+  .validator((input: unknown) => orderSchema.parse(input))
   .handler(async ({ data }) => {
     const client = publicClient();
     const ids = [...new Set(data.items.map(i => i.productId))];
