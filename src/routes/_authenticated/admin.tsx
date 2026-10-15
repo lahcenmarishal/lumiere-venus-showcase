@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -89,9 +89,12 @@ function Stats({ orders }: { orders: OrderRow[] }) {
 }
 function Kpi({ label, value }: { label: string; value: string }) { return <div className="admin-card admin-kpi"><span>{label}</span><strong>{value}</strong></div>; }
 
-function Orders({ orders, products, reload }: { orders: OrderRow[]; products: ProductRow[]; reload: () => void }) {
+export function Orders({ orders, products, reload }: { orders: OrderRow[]; products: ProductRow[]; reload: () => void }) {
   const [filter, setFilter] = useState('all');
+  const [zoom, setZoom] = useState<{ src: string; name: string; productId: string } | null>(null);
   const imageByProduct = useMemo(() => new Map(products.map(p => [p.id, p.images[0] ?? ''])), [products]);
+  const thumbOf = (i: OrderItem) => i.image || imageByProduct.get(i.productId) || '';
+  useEffect(() => { if (!zoom) return; const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setZoom(null); }; window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, [zoom]);
   async function setStatus(id: string, status: string) { await supabase.from('orders').update({ status }).eq('id', id); reload(); }
   async function removeOrder(id: string) { if (!confirm('Supprimer définitivement cette commande ?')) return; await supabase.from('orders').delete().eq('id', id); reload(); }
   const list = orders.filter(o => filter === 'all' || o.status === filter);
@@ -102,12 +105,19 @@ function Orders({ orders, products, reload }: { orders: OrderRow[]; products: Pr
         <select value={o.status} onChange={e => setStatus(o.id, e.target.value)}>{Object.entries(statuses).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></div>
       <p><strong>{o.customer_name}</strong> · <a href={`tel:${o.phone}`}>{o.phone}</a> · {o.city}</p><p className="admin-muted">{o.address}</p>
       <ul className="admin-order-items">{(o.items as OrderItem[]).map((i, k) => <li key={k} className="admin-order-item">
-        <span className="admin-order-thumb">{(i.image || imageByProduct.get(i.productId)) ? <img src={i.image || imageByProduct.get(i.productId) || ''} alt={i.name} /> : <span aria-hidden="true">{i.name.slice(0, 1).toUpperCase()}</span>}</span>
+        <span className="admin-order-thumb">{thumbOf(i) ? <button type="button" className="admin-order-thumb-btn" onClick={() => setZoom({ src: thumbOf(i), name: i.name, productId: i.productId })} title="Agrandir la photo" aria-label={`Agrandir la photo de ${i.name}`}><img src={thumbOf(i)} alt={i.name} /></button> : <span aria-hidden="true">{i.name.slice(0, 1).toUpperCase()}</span>}</span>
         <span className="admin-order-item-text"><strong>{i.quantity} × {i.name}</strong><span className="admin-muted">({i.sku}) — taille {i.size} — {money(i.price * i.quantity)}</span></span>
       </li>)}</ul>
       <p className="admin-total">Total : {money(Number(o.total))}</p>
       <div className="admin-row"><Button variant="tool" onClick={() => removeOrder(o.id)}>Supprimer la commande</Button></div>
     </article>)}
+    {zoom && <div className="admin-lightbox" role="dialog" aria-modal="true" aria-label={`Photo de ${zoom.name}`} onClick={() => setZoom(null)}>
+      <div className="admin-lightbox-box" onClick={e => e.stopPropagation()}>
+        <button type="button" className="admin-lightbox-close" onClick={() => setZoom(null)} aria-label="Fermer la photo">×</button>
+        <img src={zoom.src} alt={zoom.name} />
+        <div className="admin-lightbox-cap"><strong>{zoom.name}</strong>{products.some(p => p.id === zoom.productId) && <Link to="/produit/$id" params={{ id: zoom.productId }} target="_blank" rel="noreferrer">Voir la fiche produit</Link>}</div>
+      </div>
+    </div>}
   </section>;
 }
 
