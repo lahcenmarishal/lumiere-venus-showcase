@@ -98,11 +98,11 @@ function ProductPage() {
           <div className="size-buttons">{product.sizes.map(s => <Button key={s} variant="coutureOutline" className={`size-button ${size === s ? 'selected' : ''}`} onClick={() => { setSize(s); setError(''); }} aria-pressed={size === s}>{s}</Button>)}</div>
           {error && <p className="error-note" role="alert">{error}</p>}
           {product.available ? <section className="product-quick-order" aria-label="Commande directe" ref={orderRef}><QuickOrderForm key={product.id} title="Commander directement" items={size ? [{ productId: product.id, size, quantity: 1 }] : []} products={products} secondaryAction={<Button type="button" variant="coutureOutline" className="product-cart-alternative" onClick={add}><ShoppingBag size={15}/> Ajouter au panier</Button>} onSuccess={() => setOrdered(true)} onContinue={() => navigate({ to: '/boutique' })}/></section> : <p className="detail-note">Cette pièce est actuellement indisponible.</p>}
-          <ProductTestimonialCarousel key={product.id} items={testimonials}/>
           <p className="detail-description">{product.detail || product.description}</p>
           <div className="detail-specs"><p><strong>Matière :</strong> {product.material}</p>{product.cut && <p><strong>Design :</strong> {product.cut}</p>}<p><strong>Couleur :</strong> {product.color}</p><p><strong>Référence :</strong> {product.sku}</p><p><strong>Disponibilité :</strong> {product.available ? 'En stock' : 'Indisponible'}</p></div>
           <ul className="detail-perks"><li><Truck/> Livraison partout au Maroc</li><li><CreditCard/> Paiement à la livraison</li><li><RotateCcw/> <Link to="/retours">Retours & échanges</Link></li></ul>
           <nav className="breadcrumb" aria-label="Fil d’Ariane"><Link to="/">Accueil</Link> / <Link to="/boutique">Boutique</Link> / <Link to="/collections/$slug" params={{ slug: slugOf(product.category) }}>{product.category}</Link> / <span>{product.name}</span></nav>
+          <ProductTestimonialCarousel key={product.id} items={testimonials}/>
         </div>
       </div></div>
     </main>
