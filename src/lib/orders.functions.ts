@@ -23,7 +23,7 @@ export const submitOrder = createServerFn({ method: 'POST' })
     const items = data.items.map(item => {
       const p = catalog.get(item.productId);
       if (!p || !p.available || !p.sizes.includes(item.size)) throw new Error('Ce modèle ou cette taille n’est pas disponible.');
-      return { productId: p.id, sku: p.sku, name: p.name, size: item.size, quantity: item.quantity, price: unitPrice(p) };
+      return { productId: p.id, sku: p.sku, name: p.name, size: item.size, quantity: item.quantity, price: unitPrice(p), image: p.images[0] ?? '' };
     });
     const id = crypto.randomUUID();
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
