@@ -1,5 +1,7 @@
 import { createFileRoute, Link, notFound, useNavigate } from '@tanstack/react-router';
 import { QuickOrderForm } from '@/components/boutique/quick-order-form';
+import { ProductTestimonialCarousel } from '@/components/boutique/product-testimonial-carousel';
+import { getSiteData } from '@/lib/site.functions';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ShoppingBag, Truck, CreditCard, RotateCcw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,10 +14,10 @@ const slugOf = (name: string) => name.toLowerCase().normalize('NFD').replace(/[\
 
 export const Route = createFileRoute('/produit/$id')({
   loader: async ({ params }) => {
-    const products = await listProducts();
+    const [products, site] = await Promise.all([listProducts(), getSiteData()]);
     const product = products.find(p => p.id === params.id);
     if (!product) throw notFound();
-    return { products, product };
+    return { products, product, testimonials: site.testimonials };
   },
   head: ({ loaderData }) => {
     const p = loaderData?.product;
@@ -29,7 +31,7 @@ export const Route = createFileRoute('/produit/$id')({
 });
 
 function ProductPage() {
-  const { products, product } = Route.useLoaderData();
+  const { products, product, testimonials } = Route.useLoaderData();
   const navigate = useNavigate();
   const [img, setImg] = useState(0);
   const [size, setSize] = useState<Size | null>(product.sizes.length === 1 ? product.sizes[0] ?? null : null);
@@ -46,12 +48,28 @@ function ProductPage() {
     const update = () => {
       const column = document.querySelector<HTMLElement>('.product-page .detail-info');
       const inner = column && column.scrollHeight > column.clientHeight + 4 ? column.scrollTop : 0;
-      setOrderBarVisible(Math.max(window.scrollY, inner) > 160);
+      const submitBounds = orderRef.current?.querySelector<HTMLButtonElement>('button[type="submit"]')?.getBoundingClientRect();
+      const viewport = window.visualViewport;
+      const viewportTop = viewport?.offsetTop ?? 0;
+      const viewportHeight = viewport?.height ?? window.innerHeight;
+      const isMobile = window.matchMedia('(max-width:760px)').matches;
+      const pastMobileForm = submitBounds != null && submitBounds.bottom <= viewportTop + viewportHeight / 3;
+      setOrderBarVisible(isMobile ? pastMobileForm : Math.max(window.scrollY, inner) > 160);
     };
+    const observer = new IntersectionObserver(update);
+    if (orderRef.current) observer.observe(orderRef.current);
     update();
     window.addEventListener('scroll', update, { passive: true, capture: true });
     window.addEventListener('resize', update);
-    return () => { window.removeEventListener('scroll', update, { capture: true }); window.removeEventListener('resize', update); };
+    window.visualViewport?.addEventListener('resize', update);
+    window.visualViewport?.addEventListener('scroll', update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', update, { capture: true });
+      window.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('scroll', update);
+    };
   }, [product.id, ordered]);
 
   function add() {
@@ -82,6 +100,7 @@ function ProductPage() {
           <div className="size-buttons">{product.sizes.map(s => <Button key={s} variant="coutureOutline" className={`size-button ${size === s ? 'selected' : ''}`} onClick={() => { setSize(s); setError(''); }} aria-pressed={size === s}>{s}</Button>)}</div>
           {error && <p className="error-note" role="alert">{error}</p>}
           {product.available ? <section className="product-quick-order" aria-label="Commande directe" ref={orderRef}><QuickOrderForm key={product.id} title="Commander directement" items={size ? [{ productId: product.id, size, quantity: 1 }] : []} products={products} secondaryAction={<Button type="button" variant="coutureOutline" className="product-cart-alternative" onClick={add}><ShoppingBag size={15}/> Ajouter au panier</Button>} onSuccess={() => setOrdered(true)} onContinue={() => navigate({ to: '/boutique' })}/></section> : <p className="detail-note">Cette pièce est actuellement indisponible.</p>}
+          <ProductTestimonialCarousel key={product.id} items={testimonials}/>
           <p className="detail-description">{product.detail || product.description}</p>
           <div className="detail-specs"><p><strong>Matière :</strong> {product.material}</p>{product.cut && <p><strong>Design :</strong> {product.cut}</p>}<p><strong>Couleur :</strong> {product.color}</p><p><strong>Référence :</strong> {product.sku}</p><p><strong>Disponibilité :</strong> {product.available ? 'En stock' : 'Indisponible'}</p></div>
           <ul className="detail-perks"><li><Truck/> Livraison partout au Maroc</li><li><CreditCard/> Paiement à la livraison</li><li><RotateCcw/> <Link to="/retours">Retours & échanges</Link></li></ul>
