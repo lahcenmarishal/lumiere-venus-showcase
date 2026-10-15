@@ -9,6 +9,7 @@ import { listProducts } from '@/lib/products.functions';
 import { CartDialog } from '@/components/boutique/commerce-dialogs';
 import { useCartState, setCartState, addToCart } from '@/lib/cart-store';
 import { money, unitPrice, type Size } from '@/data/catalog';
+import { isOrderBarVisible } from '@/lib/order-bar-visibility';
 
 const slugOf = (name: string) => name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -51,10 +52,7 @@ function ProductPage() {
       const submitBounds = orderRef.current?.querySelector<HTMLButtonElement>('button[type="submit"]')?.getBoundingClientRect();
       const viewport = window.visualViewport;
       const viewportTop = viewport?.offsetTop ?? 0;
-      const viewportHeight = viewport?.height ?? window.innerHeight;
-      const isMobile = window.matchMedia('(max-width:760px)').matches;
-      const pastMobileForm = submitBounds != null && submitBounds.bottom <= viewportTop + viewportHeight / 3;
-      setOrderBarVisible(isMobile ? pastMobileForm : Math.max(window.scrollY, inner) > 160);
+      setOrderBarVisible(isOrderBarVisible({ mobile: window.matchMedia('(max-width:760px)').matches, scroll: Math.max(window.scrollY, inner), submitBottom: submitBounds?.bottom ?? null, viewportTop, viewportHeight: viewport?.height ?? window.innerHeight }));
     };
     const observer = new IntersectionObserver(update);
     if (orderRef.current) observer.observe(orderRef.current);
@@ -110,10 +108,6 @@ function ProductPage() {
     </main>
     {product.available && !ordered && <aside className={`product-order-bar ${orderBarVisible ? 'is-visible' : ''}`} aria-label="Commande rapide">
       <div className="product-order-bar-inner">
-        <div className="product-order-bar-info">
-          <span className="product-order-bar-name">{product.name}</span>
-          <span className="product-order-bar-meta"><strong>{money(unitPrice(product))}</strong><span>Livraison partout au Maroc</span></span>
-        </div>
         <Button variant="hero" className="product-order-bar-cta" onClick={orderNow}>COMMANDER MAINTENANT <ArrowRight size={16}/></Button>
       </div>
     </aside>}
