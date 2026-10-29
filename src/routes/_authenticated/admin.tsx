@@ -129,6 +129,16 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
   const [isNew, setIsNew] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+  const fallbackCategories = ['Bagues', 'Colliers', 'Bracelets', 'Boucles d’oreilles'];
+  const [categories, setCategories] = useState<string[]>(fallbackCategories);
+  useEffect(() => {
+    supabase.from('categories').select('name').order('sort_order').then(({ data }) => {
+      const names = (data ?? []).map(c => c.name).filter(Boolean);
+      if (names.length) setCategories(names);
+    });
+  }, []);
+  // La catégorie d'un produit existant reste sélectionnable même si la collection a été retirée.
+  const categoryOptions = edit && edit.category && !categories.includes(edit.category) ? [edit.category, ...categories] : categories;
 
   async function upload(files: FileList | null) {
     if (!files || !edit) return; setBusy(true); setMsg('');
@@ -170,7 +180,7 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
     <div className="admin-grid">
       <label>Nom<input required value={edit.name} onChange={e => set('name', e.target.value)} /></label>
       <label>SKU<input required value={edit.sku} onChange={e => set('sku', e.target.value)} placeholder="JJ-005" /></label>
-      <label>Catégorie<select value={edit.category} onChange={e => set('category', e.target.value)}><option>Bagues</option><option>Colliers</option><option>Bracelets</option><option>Boucles d’oreilles</option></select></label>
+      <label>Catégorie<select value={edit.category} onChange={e => set('category', e.target.value)}>{categoryOptions.map(c => <option key={c}>{c}</option>)}</select></label>
       <label>Étiquette<input value={edit.label} onChange={e => set('label', e.target.value)} placeholder="Pièce signature" /></label>
       <label>Prix (DH)<input required type="number" min={0} value={edit.price} onChange={e => set('price', Number(e.target.value))} /></label>
       <label>Prix promo (DH)<input type="number" min={0} value={edit.sale_price ?? ''} onChange={e => set('sale_price', e.target.value ? Number(e.target.value) : null)} /></label>
@@ -197,7 +207,7 @@ function Products({ products, reload }: { products: ProductRow[]; reload: () => 
   </form></section>;
 
   return <section className="admin-section">
-    <div className="admin-row"><Button variant="couture" onClick={() => { setIsNew(true); setEdit({ ...empty, sizes: [...allSizes], sort_order: products.length + 1 }); setMsg(''); }}>+ AJOUTER UN PRODUIT</Button></div>
+    <div className="admin-row"><Button variant="couture" onClick={() => { setIsNew(true); setEdit({ ...empty, category: categories[0] ?? empty.category, sizes: [...allSizes], sort_order: products.length + 1 }); setMsg(''); }}>+ AJOUTER UN PRODUIT</Button></div>
     <div className="admin-products">{products.map(p => <article key={p.id} className="admin-card admin-product">
       <img src={p.images[0]} alt={p.name} /><div><strong>{p.name}</strong><p className="admin-muted">{p.sku} · {p.category} · {money(Number(p.sale_price ?? p.price))}</p><p className="admin-muted">{p.active ? 'Visible' : 'Masqué'}{p.featured ? ' · Accueil' : ''} · {p.available ? 'Disponible' : 'Indisponible'}</p>
         <div className="admin-row"><Button variant="coutureOutline" onClick={() => { setIsNew(false); setEdit({ ...p, price: Number(p.price), sale_price: p.sale_price == null ? null : Number(p.sale_price) }); setMsg(''); }}>MODIFIER</Button><Button variant="tool" onClick={() => remove(p.id)}>Supprimer</Button></div></div>
